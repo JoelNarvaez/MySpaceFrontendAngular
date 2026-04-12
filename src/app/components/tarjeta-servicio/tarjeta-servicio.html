@@ -1,0 +1,29 @@
+<div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+
+  <!-- Imagen -->
+  <div class="h-48 bg-teal-100 flex items-center justify-center">
+    <span class="text-6xl">💆</span>
+  </div>
+
+  <!-- Contenido -->
+  <div class="p-6">
+    <h3 class="text-xl font-medium text-stone-700 mb-2">{{ servicio.nombre }}</h3>
+    <p class="text-stone-400 text-sm mb-4">{{ servicio.descripcion }}</p>
+
+    <div class="flex items-center justify-between mb-4">
+      <span class="text-teal-600 font-semibold text-lg">
+        {{ servicio.precio | precioMxn }}
+      </span>
+      <span class="text-stone-400 text-sm">
+        {{ servicio.duracion_min }} min
+      </span>
+    </div>
+
+    <button
+      (click)="onVerDetalle()"
+      class="w-full bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-full transition-colors duration-300">
+      Ver detalle
+    </button>
+  </div>
+
+</div>

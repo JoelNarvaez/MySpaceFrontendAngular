@@ -1,0 +1,75 @@
+<!-- Hero section -->
+<section class="relative h-screen bg-cover bg-center flex items-center justify-center"
+  style="background-image: url('hero-image.jpg')">
+
+  <!-- Overlay oscuro -->
+  <div class="absolute inset-0 bg-black/40"></div>
+
+  <!-- Contenido -->
+  <div class="relative z-10 text-center text-white px-4">
+    <div class="border-2 border-white/70 px-12 py-10 max-w-2xl mx-auto">
+      <h1 class="text-5xl font-light mb-4 tracking-widest">MySpace</h1>
+      <p class="text-xl font-light mb-8 italic">
+        "Aquí va el eslogan -- Donde el tiempo se detiene y el alma descansa"
+      </p>
+      <button routerLink="/agendar"
+        class="bg-teal-600/80 hover:bg-teal-600 text-white px-8 py-3 rounded-full text-lg transition-all duration-300">
+        ¡Agenda tu cita!
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Sección servicios destacados -->
+<section class="py-16 px-8 bg-stone-50">
+  <h2 class="text-3xl text-center text-stone-700 font-light mb-2 tracking-widest">NUESTROS SERVICIOS</h2>
+  <p class="text-center text-stone-400 mb-12">Descubre una experiencia única de bienestar</p>
+
+  <div class="grid grid-cols-3 gap-8 max-w-5xl mx-auto">
+    <div class="text-center p-6">
+      <div class="text-5xl mb-4">💆</div>
+      <h3 class="text-lg font-medium text-stone-700 mb-2">Masajes</h3>
+      <p class="text-stone-400 text-sm">Relaja cuerpo y mente con nuestros masajes terapéuticos</p>
+    </div>
+    <div class="text-center p-6">
+      <div class="text-5xl mb-4">✨</div>
+      <h3 class="text-lg font-medium text-stone-700 mb-2">Faciales</h3>
+      <p class="text-stone-400 text-sm">Tratamientos para una piel radiante y saludable</p>
+    </div>
+    <div class="text-center p-6">
+      <div class="text-5xl mb-4">🌿</div>
+      <h3 class="text-lg font-medium text-stone-700 mb-2">Aromaterapia</h3>
+      <p class="text-stone-400 text-sm">Equilibra tu energía con aceites esenciales naturales</p>
+    </div>
+  </div>
+
+  <div class="text-center mt-10">
+    <a routerLink="/servicios"
+      class="border border-teal-600 text-teal-600 hover:bg-teal-600 hover:text-white px-8 py-3 rounded-full transition-all duration-300">
+      Ver todos los servicios
+    </a>
+  </div>
+</section>
+
+<!-- Sección por qué elegirnos -->
+<section class="py-16 px-8 bg-white">
+  <h2 class="text-3xl text-center text-stone-700 font-light mb-12 tracking-widest">¿POR QUÉ ELEGIRNOS?</h2>
+
+  <div class="grid grid-cols-3 gap-8 max-w-5xl mx-auto">
+    <div class="text-center">
+      <div class="text-4xl mb-3">🏆</div>
+      <h3 class="font-medium text-stone-700 mb-2">Experiencia</h3>
+      <p class="text-stone-400 text-sm">Más de 10 años brindando bienestar a nuestros clientes</p>
+    </div>
+    <div class="text-center">
+      <div class="text-4xl mb-3">👐</div>
+      <h3 class="font-medium text-stone-700 mb-2">Profesionales</h3>
+      <p class="text-stone-400 text-sm">Especialistas certificados en cada tratamiento</p>
+    </div>
+    <div class="text-center">
+      <div class="text-4xl mb-3">🌱</div>
+      <h3 class="font-medium text-stone-700 mb-2">Natural</h3>
+      <p class="text-stone-400 text-sm">Productos 100% naturales y libres de químicos dañinos</p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,67 @@
+<section class="min-h-screen bg-stone-50 flex items-center justify-center py-16 px-4">
+  <div class="bg-white rounded-2xl shadow-md p-10 w-full max-w-md">
+
+    <!-- Logo -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-light text-teal-600 tracking-widest">🌿 SERENITY SPA</h1>
+      <p class="text-stone-400 mt-2">Inicia sesión para continuar</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="iniciarSesion()">
+
+      <!-- Email -->
+      <div class="mb-6">
+        <label class="block text-stone-600 text-sm mb-2">Correo electrónico</label>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="ejemplo@correo.com"
+          class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500 transition-colors"/>
+
+        @if (email?.invalid && email?.touched) {
+          @if (email?.errors?.['required']) {
+            <p class="text-red-400 text-xs mt-1 ml-2">El correo es obligatorio</p>
+          }
+          @if (email?.errors?.['email']) {
+            <p class="text-red-400 text-xs mt-1 ml-2">Ingresa un correo válido</p>
+          }
+        }
+      </div>
+
+      <!-- Contraseña -->
+      <div class="mb-8">
+        <label class="block text-stone-600 text-sm mb-2">Contraseña</label>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="••••••••"
+          class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500 transition-colors"/>
+
+        @if (password?.invalid && password?.touched) {
+          @if (password?.errors?.['required']) {
+            <p class="text-red-400 text-xs mt-1 ml-2">La contraseña es obligatoria</p>
+          }
+          @if (password?.errors?.['minlength']) {
+            <p class="text-red-400 text-xs mt-1 ml-2">Mínimo 6 caracteres</p>
+          }
+        }
+      </div>
+
+      <!-- Botón -->
+      <button
+        type="submit"
+        class="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-full text-lg transition-colors duration-300">
+        Iniciar sesión
+      </button>
+
+    </form>
+
+    <!-- Hint para pruebas -->
+    <div class="mt-6 p-4 bg-stone-50 rounded-xl text-xs text-stone-400">
+      <p class="font-medium mb-1">Cuentas de prueba:</p>
+      <p>👤 usuario&#64;spa.com / user123</p>
+      <p>🔑 admin&#64;spa.com / admin123</p>
+    </div>
+
+  </div>
+</section>

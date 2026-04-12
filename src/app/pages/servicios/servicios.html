@@ -1,0 +1,24 @@
+<section class="py-16 px-8 bg-stone-50 min-h-screen">
+
+  <div class="max-w-6xl mx-auto">
+    <h1 class="text-4xl text-center text-stone-700 font-light mb-2 tracking-widest">
+      NUESTROS SERVICIOS
+    </h1>
+    <p class="text-center text-stone-400 mb-12">
+      Elige el tratamiento perfecto para ti
+    </p>
+
+    @if (servicios.length === 0) {
+      <p class="text-center text-stone-400">Cargando servicios...</p>
+    } @else {
+      <div class="grid grid-cols-3 gap-8">
+        @for (servicio of servicios; track servicio.id) {
+          <app-tarjeta-servicio
+            [servicio]="servicio"
+            (verDetalle)="irADetalle($event)" />
+        }
+      </div>
+    }
+  </div>
+
+</section>

@@ -1,0 +1,48 @@
+<section class="min-h-screen bg-stone-50 py-16 px-8">
+  <div class="max-w-3xl mx-auto">
+
+    <h1 class="text-4xl text-center text-stone-700 font-light mb-2 tracking-widest">MIS CITAS</h1>
+    <p class="text-center text-stone-400 mb-10">Aquí puedes ver y gestionar tus citas</p>
+
+    @if (citas.length === 0) {
+      <!-- Sin citas -->
+      <div class="bg-white rounded-2xl shadow-md p-12 text-center">
+        <div class="text-6xl mb-4">📅</div>
+        <h2 class="text-xl text-stone-600 mb-4">No tienes citas agendadas</h2>
+        <button (click)="router.navigate(['/agendar'])"
+          class="bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-full transition-colors duration-300">
+          Agendar una cita
+        </button>
+      </div>
+    } @else {
+      <div class="flex flex-col gap-4">
+        @for (cita of citas; track cita.id) {
+          <div class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-between">
+
+            <div class="flex gap-6 items-center">
+              <div class="text-4xl">💆</div>
+              <div>
+                <h3 class="text-lg font-medium text-stone-700">{{ cita.nombre_servicio }}</h3>
+                <p class="text-stone-400 text-sm">📅 {{ cita.fecha }} — 🕐 {{ cita.hora }}</p>
+              </div>
+            </div>
+
+            <button (click)="cancelarCita(cita.id)"
+              class="border border-red-400 text-red-400 hover:bg-red-400 hover:text-white px-6 py-2 rounded-full transition-colors duration-300 text-sm">
+              Cancelar
+            </button>
+
+          </div>
+        }
+      </div>
+
+      <div class="text-center mt-8">
+        <button (click)="router.navigate(['/agendar'])"
+          class="border border-teal-600 text-teal-600 hover:bg-teal-600 hover:text-white px-8 py-3 rounded-full transition-colors duration-300">
+          Agendar otra cita
+        </button>
+      </div>
+    }
+
+  </div>
+</section>
