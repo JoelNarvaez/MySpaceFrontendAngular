@@ -1,31 +1,40 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Servicio } from '../interfaces/servicio';
+import { environment } from '../../environments/environment';
+
+type ServiciosResponse<T> = T | { success?: boolean; data?: T };
 
 @Injectable({
   providedIn: 'root'
 })
 export class Servicios {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = environment.apiUrl;
 
-  // Mock data — se reemplaza solo cuando el back esté listo
-  private mockServicios: Servicio[] = [
-    { id: 1, nombre: 'Masaje relajante', descripcion: 'Masaje corporal completo para aliviar el estrés.', duracion_min: 60, precio: 850, imagen_url: 'assets/masaje.jpg' },
-    { id: 2, nombre: 'Facial hidratante', descripcion: 'Tratamiento facial profundo con productos naturales.', duracion_min: 45, precio: 650, imagen_url: 'assets/facial.jpg' },
-    { id: 3, nombre: 'Aromaterapia', descripcion: 'Terapia con aceites esenciales para equilibrar cuerpo y mente.', duracion_min: 50, precio: 700, imagen_url: 'assets/aromaterapia.jpg' },
-    { id: 4, nombre: 'Exfoliación corporal', descripcion: 'Eliminación de células muertas para una piel suave y radiante.', duracion_min: 40, precio: 550, imagen_url: 'assets/exfoliacion.jpg' },
-  ];
+  private extraerData<T>(res: ServiciosResponse<T>): T {
+    if (Array.isArray(res)) {
+      return res as T;
+    }
 
-  getServicios(): Observable<Servicio[]> {
-    // Cuando el back esté listo, cambia esta línea:
-    // return this.http.get<Servicio[]>(`${this.apiUrl}/servicios`);
-    return of(this.mockServicios);
+    if (res && typeof res === 'object' && 'data' in res && res.data !== undefined) {
+      return res.data;
+    }
+
+    return res as T;
   }
 
-  getServicioById(id: number): Observable<Servicio | undefined> {
-    // return this.http.get<Servicio>(`${this.apiUrl}/servicios/${id}`);
-    return of(this.mockServicios.find(s => s.id === id));
+  getServicios(): Observable<Servicio[]> {
+    return this.http.get<ServiciosResponse<Servicio[]>>(`${this.apiUrl}/servicios`).pipe(
+      map(res => this.extraerData(res))
+    );
+  }
+
+  getServicioById(id: number): Observable<Servicio> {
+    return this.http.get<ServiciosResponse<Servicio>>(`${this.apiUrl}/servicios/${id}`).pipe(
+      map(res => this.extraerData(res))
+    );
   }
 }

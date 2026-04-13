@@ -28,7 +28,7 @@
       }
 
       <li class="text-stone-500 text-sm">
-        {{ authService.usuario()?.nombre }}
+        {{ authService.usuario()?.nombre || authService.usuario()?.email || 'Usuario' }}
       </li>
 
       <li>

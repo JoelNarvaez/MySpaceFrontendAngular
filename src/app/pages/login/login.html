@@ -50,18 +50,17 @@
       <!-- Botón -->
       <button
         type="submit"
-        class="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-full text-lg transition-colors duration-300 cursor-pointer">
-        Iniciar sesión
+        [disabled]="cargando"
+        class="w-full bg-teal-600 hover:bg-teal-700 disabled:opacity-60 text-white py-3 rounded-full text-lg transition-colors duration-300 cursor-pointer">
+        {{ cargando ? 'Iniciando sesión...' : 'Iniciar sesión' }}
       </button>
 
     </form>
 
-    <!-- Hint para pruebas -->
-    <div class="mt-6 p-4 bg-stone-50 rounded-xl text-xs text-stone-400">
-      <p class="font-medium mb-1">Cuentas de prueba:</p>
-      <p>👤 usuario&#64;spa.com / user123</p>
-      <p>🔑 admin&#64;spa.com / admin123</p>
-    </div>
+    <p class="text-center text-stone-500 text-sm mt-6">
+      ¿No tienes cuenta?
+      <a routerLink="/registro" class="text-teal-600 hover:underline font-medium">Regístrate aquí</a>
+    </p>
 
   </div>
 </section>

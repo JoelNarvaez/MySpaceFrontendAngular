@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Servicios } from '../../services/servicios';
 import { Servicio } from '../../interfaces/servicio';
@@ -6,6 +6,7 @@ import { PrecioMxnPipe } from '../../pipes/precio-mxn-pipe';
 
 @Component({
   selector: 'app-detalle-servicio',
+  standalone: true,
   imports: [PrecioMxnPipe],
   templateUrl: './detalle-servicio.html',
   styleUrl: './detalle-servicio.css'
@@ -15,21 +16,20 @@ export class DetalleServicio implements OnInit {
   router = inject(Router);
   private serviciosService = inject(Servicios);
 
-  servicio: Servicio | undefined;
+  servicio = signal<Servicio | undefined>(undefined);
 
   ngOnInit() {
-    // paramsMap 
     this.route.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
       this.serviciosService.getServicioById(id).subscribe(data => {
-        this.servicio = data;
+        this.servicio.set(data);
       });
     });
   }
 
   irAgendar() {
     this.router.navigate(['/agendar'], {
-      queryParams: { idServicio: this.servicio?.id, nombre: this.servicio?.nombre }
+      queryParams: { idServicio: this.servicio()?.id, nombre: this.servicio()?.nombre }
     });
   }
 }

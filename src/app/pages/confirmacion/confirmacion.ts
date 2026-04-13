@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-confirmacion',
@@ -8,8 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './confirmacion.css'
 })
 export class Confirmacion implements OnInit {
-  private route = inject(ActivatedRoute);
-  router = inject(Router);
+  private router = inject(Router);
 
   nombre = '';
   servicio = '';
@@ -17,12 +17,24 @@ export class Confirmacion implements OnInit {
   hora = '';
 
   ngOnInit() {
-    // queryParams que recibe los datos de la cita 
-    this.route.queryParamMap.subscribe(params => {
-      this.nombre = params.get('nombre') || '';
-      this.servicio = params.get('servicio') || '';
-      this.fecha = params.get('fecha') || '';
-      this.hora = params.get('hora') || '';
-    });
+    const state = history.state;
+
+    if (!state?.nombre) {
+      this.router.navigate(['/mis-citas']);
+      return;
+    }
+
+    this.nombre = state['nombre'];
+    this.servicio = state['servicio'];
+    this.fecha = state['fecha'];
+    this.hora = state['hora'];
+  }
+
+  irAMisCitas() {
+    this.router.navigate(['/mis-citas']);
+  }
+
+  irAInicio() {
+    this.router.navigate(['/']);
   }
 }

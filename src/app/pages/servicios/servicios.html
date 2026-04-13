@@ -8,11 +8,16 @@
       Elige el tratamiento perfecto para ti
     </p>
 
-    @if (servicios.length === 0) {
+    @if (cargando()) {
       <p class="text-center text-stone-400">Cargando servicios...</p>
+    } @else if (errorCarga()) {
+      <p class="text-center text-red-400">No se pudieron cargar los servicios.</p>
+    } @else if (servicios().length === 0) {
+      <p class="text-center text-stone-400">No hay servicios disponibles.</p>
     } @else {
+
       <div class="grid grid-cols-3 gap-8">
-        @for (servicio of servicios; track servicio.id) {
+        @for (servicio of servicios(); track servicio.id) {
           <app-tarjeta-servicio
             [servicio]="servicio"
             (verDetalle)="irADetalle($event)" />

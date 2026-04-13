@@ -4,6 +4,7 @@ import { PrecioMxnPipe } from '../../pipes/precio-mxn-pipe';
 
 @Component({
   selector: 'app-tarjeta-servicio',
+  standalone: true,
   imports: [PrecioMxnPipe],
   templateUrl: './tarjeta-servicio.html',
   styleUrl: './tarjeta-servicio.css'
