@@ -19,17 +19,47 @@ export class AdminBloqueos implements OnInit {
   form = this.fb.group({
     tipo: ['dia', [Validators.required]],
     fecha: [''],
-    dia_semana: [null],
-    hora: [''],
+    dia_semana: [null as number | null],
+    hora_inicio: [''],
+    hora_fin: [''],
     motivo: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]]
   });
 
   get tipo() { return this.form.get('tipo'); }
   get fecha() { return this.form.get('fecha'); }
+  get hora_inicio() { return this.form.get('hora_inicio'); }
+  get hora_fin() { return this.form.get('hora_fin'); }
   get motivo() { return this.form.get('motivo'); }
 
   ngOnInit() {
     this.cargarBloqueos();
+    this.aplicarValidacionCondicional();
+  }
+
+  private aplicarValidacionCondicional() {
+    this.form.get('tipo')?.valueChanges.subscribe(tipo => {
+      const fecha = this.form.get('fecha');
+      const dia_semana = this.form.get('dia_semana');
+      const hora_inicio = this.form.get('hora_inicio');
+      const hora_fin = this.form.get('hora_fin');
+
+      fecha?.clearValidators();
+      dia_semana?.clearValidators();
+      hora_inicio?.clearValidators();
+      hora_fin?.clearValidators();
+
+      if (tipo === 'horario') {
+        hora_inicio?.setValidators(Validators.required);
+        hora_fin?.setValidators(Validators.required);
+      }
+
+      fecha?.updateValueAndValidity();
+      dia_semana?.updateValueAndValidity();
+      hora_inicio?.updateValueAndValidity();
+      hora_fin?.updateValueAndValidity();
+
+      this.form.patchValue({ fecha: '', dia_semana: null, hora_inicio: '', hora_fin: '' });
+    });
   }
 
   cargarBloqueos() {
@@ -44,7 +74,29 @@ export class AdminBloqueos implements OnInit {
       return;
     }
 
-    this.bloqueosService.crearBloqueo(this.form.value as any).subscribe({
+    const valor = this.form.value;
+    const tipo = valor.tipo as 'dia' | 'horario';
+
+    if (tipo === 'dia' && !valor.fecha && valor.dia_semana === null) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Datos incompletos',
+        text: 'Debes indicar una fecha específica o un día de la semana',
+        confirmButtonColor: '#0d9488'
+      });
+      return;
+    }
+
+    const bloqueo: Omit<Bloqueo, 'id'> = {
+      tipo,
+      motivo: valor.motivo!,
+      fecha: valor.fecha || undefined,
+      dia_semana: valor.dia_semana ?? undefined,
+      hora_inicio: valor.hora_inicio || undefined,
+      hora_fin: valor.hora_fin || undefined,
+    };
+
+    this.bloqueosService.crearBloqueo(bloqueo).subscribe({
       next: () => {
         Swal.fire({
           icon: 'success',

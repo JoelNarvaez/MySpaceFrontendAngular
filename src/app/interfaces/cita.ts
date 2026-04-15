@@ -7,5 +7,8 @@ export interface Cita {
     nombre_servicio?: string;
     fecha: string;
     hora: string;
+    estado?: 'pendiente' | 'confirmada' | 'cancelada' | 'completada' | 'no_asistio';
+    precio_cobrado?: number;
+    motivo_cancelacion?: string;
     fecha_creacion?: string;
 }

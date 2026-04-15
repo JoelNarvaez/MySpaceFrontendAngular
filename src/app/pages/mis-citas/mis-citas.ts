@@ -2,8 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Citas } from '../../services/citas';
 import { Cita } from '../../interfaces/cita';
-import Swal from 'sweetalert2';
 import { Auth } from '../../services/auth';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-mis-citas',
@@ -17,11 +17,28 @@ export class MisCitas implements OnInit {
   router = inject(Router);
 
   citas: Cita[] = [];
+  cargando = true;
+
+  get citasProximas(): Cita[] {
+    const hoy = new Date().toISOString().split('T')[0];
+    return this.citas.filter(c => c.fecha >= hoy && c.estado !== 'cancelada');
+  }
+
+  get citasPasadas(): Cita[] {
+    const hoy = new Date().toISOString().split('T')[0];
+    return this.citas.filter(c => c.fecha < hoy || c.estado === 'cancelada');
+  }
 
   ngOnInit() {
     const email = this.authService.usuario()?.email || '';
-    this.citasService.getCitasPorUsuario(email).subscribe(data => {
-      this.citas = data;
+    this.citasService.getCitasPorUsuario(email).subscribe({
+      next: (data) => {
+        this.citas = data;
+        this.cargando = false;
+      },
+      error: () => {
+        this.cargando = false;
+      }
     });
   }
 
@@ -39,7 +56,9 @@ export class MisCitas implements OnInit {
       if (result.isConfirmed) {
         this.citasService.cancelarCita(id).subscribe({
           next: () => {
-            this.citas = this.citas.filter(c => c.id !== id);
+            this.citas = this.citas.map(c =>
+              c.id === id ? { ...c, estado: 'cancelada' } : c
+            );
             Swal.fire({
               icon: 'success',
               title: 'Cita cancelada',

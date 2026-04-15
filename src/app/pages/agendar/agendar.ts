@@ -3,12 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Servicios } from '../../services/servicios';
 import { Citas } from '../../services/citas';
+import { Auth } from '../../services/auth';
 import { Servicio } from '../../interfaces/servicio';
 import { Horario } from '../../interfaces/horario';
 import { SelectorHorario } from '../../components/selector-horario/selector-horario';
 import Swal from 'sweetalert2';
 
-// Validador personalizado APORTACIÓN EXTRA 
 export function fechaFuturaValidator(control: AbstractControl): ValidationErrors | null {
   if (!control.value) return null;
   const fecha = new Date(control.value);
@@ -29,6 +29,7 @@ export class Agendar implements OnInit {
   private fb = inject(FormBuilder);
   private serviciosService = inject(Servicios);
   private citasService = inject(Citas);
+  private authService = inject(Auth);
 
   servicios: Servicio[] = [];
   horarios: Horario[] = [];
@@ -51,12 +52,20 @@ export class Agendar implements OnInit {
   get hora() { return this.form.get('hora'); }
 
   ngOnInit() {
-    // Cargar servicios
     this.serviciosService.getServicios().subscribe(data => {
       this.servicios = data;
     });
 
-    // queryParams si viene del detalle de servicio 
+    // Pre-llenar con datos del usuario autenticado
+    const u = this.authService.usuario();
+    if (u) {
+      this.form.patchValue({
+        nombre: u.nombre,
+        email: u.email,
+        telefono: u.telefono || ''
+      });
+    }
+
     this.route.queryParamMap.subscribe(params => {
       const idServicio = params.get('idServicio');
       if (idServicio) {
@@ -105,7 +114,8 @@ export class Agendar implements OnInit {
       fecha: fecha!,
       hora: hora!
     }).subscribe({
-      next: (res) => {
+      next: () => {
+        const servicioNombre = this.servicios.find(s => s.id === Number(id_servicio))?.nombre;
         Swal.fire({
           icon: 'success',
           title: '¡Cita agendada!',
@@ -113,20 +123,18 @@ export class Agendar implements OnInit {
           confirmButtonColor: '#0d9488'
         }).then(() => {
           this.router.navigate(['/confirmacion'], {
-            queryParams: {
-              nombre: nombre,
-              servicio: this.servicios.find(s => s.id === Number(id_servicio))?.nombre,
-              fecha: fecha,
-              hora: hora
-            }
+            state: { nombre, servicio: servicioNombre, fecha, hora }
           });
         });
       },
-      error: () => {
+      error: (err) => {
+        const mensaje = err.status === 409
+          ? 'Ese horario ya fue reservado, elige otro'
+          : 'No se pudo agendar la cita, intenta de nuevo';
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'No se pudo agendar la cita, intenta de nuevo',
+          text: mensaje,
           confirmButtonColor: '#0d9488'
         });
       }

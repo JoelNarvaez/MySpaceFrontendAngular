@@ -1,66 +1,64 @@
-<section class="min-h-screen bg-stone-50 flex items-center justify-center py-16 px-4">
-  <div class="bg-white rounded-2xl shadow-md p-10 w-full max-w-md">
+<section class="min-h-screen bg-[#F5F5F4] flex items-center justify-center py-16 px-4 relative overflow-hidden">
+  
+  <div class="absolute -top-24 -left-24 w-96 h-96 bg-[#1E3A5F]/5 rounded-full blur-3xl"></div>
 
-    <!-- Logo -->
-    <div class="text-center mb-8">
-      <h1 class="text-3xl font-light text-teal-600 tracking-widest">🌿 SERENITY SPA</h1>
-      <p class="text-stone-400 mt-2">Inicia sesión para continuar</p>
+  <div class="bg-white rounded-[2.5rem] shadow-2xl p-10 md:p-12 w-full max-w-md border border-gray-100 relative z-10">
+
+    <div class="text-center mb-10">
+      <h1 class="logo-font text-4xl text-[#1E3A5F] tracking-tighter leading-none">MY SPACE</h1>
+      <div class="flex items-center justify-center gap-2 mt-2">
+        <div class="h-[1px] w-4 bg-[#D4A373]"></div>
+        <span class="text-[10px] uppercase tracking-[0.4em] font-bold text-[#D4A373]">Massage Therapy</span>
+        <div class="h-[1px] w-4 bg-[#D4A373]"></div>
+      </div>
+      <p class="text-gray-400 mt-6 text-xs font-light italic">"Tu camino a la serenidad comienza aquí"</p>
     </div>
 
-    <form [formGroup]="form" (ngSubmit)="iniciarSesion()">
+    <form [formGroup]="form" (ngSubmit)="iniciarSesion()" class="space-y-6">
 
-      <!-- Email -->
-      <div class="mb-6">
-        <label class="block text-stone-600 text-sm mb-2">Correo electrónico</label>
+      <div>
+        <label class="block text-[#1E3A5F] text-[10px] uppercase tracking-[0.2em] font-bold mb-3 ml-4">Correo electrónico</label>
         <input
           type="email"
           formControlName="email"
           placeholder="ejemplo@correo.com"
-          class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500 transition-colors"/>
+          class="w-full border border-gray-200 bg-[#F5F5F4]/50 rounded-full px-6 py-4 focus:outline-none focus:border-[#D4A373] focus:ring-1 focus:ring-[#D4A373] transition-all text-[#1E3A5F] placeholder:text-gray-300 text-sm"/>
 
         @if (email?.invalid && email?.touched) {
-          @if (email?.errors?.['required']) {
-            <p class="text-red-400 text-xs mt-1 ml-2">El correo es obligatorio</p>
-          }
-          @if (email?.errors?.['email']) {
-            <p class="text-red-400 text-xs mt-1 ml-2">Ingresa un correo válido</p>
-          }
+          <p class="text-red-400 text-[10px] uppercase tracking-wider mt-2 ml-4 font-bold">Email requerido</p>
         }
       </div>
 
-      <!-- Contraseña -->
-      <div class="mb-8">
-        <label class="block text-stone-600 text-sm mb-2">Contraseña</label>
+      <div class="mb-4">
+        <div class="flex justify-between items-center mb-3 px-4">
+          <label class="block text-[#1E3A5F] text-[10px] uppercase tracking-[0.2em] font-bold">Contraseña</label>
+          <a href="#" class="text-[9px] text-gray-400 hover:text-[#D4A373] uppercase tracking-widest transition-colors">¿La olvidaste?</a>
+        </div>
         <input
           type="password"
           formControlName="password"
           placeholder="••••••••"
-          class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500 transition-colors"/>
+          class="w-full border border-gray-200 bg-[#F5F5F4]/50 rounded-full px-6 py-4 focus:outline-none focus:border-[#D4A373] focus:ring-1 focus:ring-[#D4A373] transition-all text-[#1E3A5F] placeholder:text-gray-300 text-sm"/>
 
         @if (password?.invalid && password?.touched) {
-          @if (password?.errors?.['required']) {
-            <p class="text-red-400 text-xs mt-1 ml-2">La contraseña es obligatoria</p>
-          }
-          @if (password?.errors?.['minlength']) {
-            <p class="text-red-400 text-xs mt-1 ml-2">Mínimo 6 caracteres</p>
-          }
+          <p class="text-red-400 text-[10px] uppercase tracking-wider mt-2 ml-4 font-bold">Verificar contraseña</p>
         }
       </div>
 
-      <!-- Botón -->
       <button
         type="submit"
-        class="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-full text-lg transition-colors duration-300 cursor-pointer">
-        Iniciar sesión
+        [disabled]="cargando"
+        class="w-full bg-[#1E3A5F] hover:bg-[#D4A373] disabled:bg-gray-200 text-white py-4 rounded-full text-xs font-bold uppercase tracking-[0.3em] transition-all duration-500 shadow-xl hover:-translate-y-1 active:scale-95 cursor-pointer mt-4">
+        {{ cargando ? 'Iniciando sesión...' : 'Entrar' }}
       </button>
 
     </form>
 
-    <!-- Hint para pruebas -->
-    <div class="mt-6 p-4 bg-stone-50 rounded-xl text-xs text-stone-400">
-      <p class="font-medium mb-1">Cuentas de prueba:</p>
-      <p>👤 usuario&#64;spa.com / user123</p>
-      <p>🔑 admin&#64;spa.com / admin123</p>
+    <div class="text-center mt-10">
+      <p class="text-gray-400 text-[11px] uppercase tracking-widest">
+        ¿Aún no eres parte? 
+        <a routerLink="/registro" class="text-[#D4A373] hover:text-[#1E3A5F] font-bold transition-colors ml-1">Regístrate</a>
+      </p>
     </div>
 
   </div>

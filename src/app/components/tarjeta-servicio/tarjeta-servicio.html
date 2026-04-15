@@ -1,29 +1,41 @@
-<div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+<div class="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col h-full">
 
-  <!-- Imagen -->
-  <div class="h-48 bg-teal-100 flex items-center justify-center">
-    <span class="text-6xl">💆</span>
+  <div class="h-48 bg-[#F5F5F4] flex items-center justify-center relative transition-colors group-hover:bg-[#E2E8F0]">
+    <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]"></div>
+    
+    <span class="text-6xl filter grayscale-[0.3] group-hover:grayscale-0 transition-all duration-700">MS</span>
+    
+    <div class="absolute top-4 right-4 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full border border-gray-100 shadow-sm">
+      <span class="text-[10px] font-bold text-[#1E3A5F] uppercase tracking-tighter">{{ servicio.duracion_min }} min</span>
+    </div>
   </div>
 
-  <!-- Contenido -->
-  <div class="p-6">
-    <h3 class="text-xl font-medium text-stone-700 mb-2">{{ servicio.nombre }}</h3>
-    <p class="text-stone-400 text-sm mb-4">{{ servicio.descripcion }}</p>
-
-    <div class="flex items-center justify-between mb-4">
-      <span class="text-teal-600 font-semibold text-lg">
-        {{ servicio.precio | precioMxn }}
-      </span>
-      <span class="text-stone-400 text-sm">
-        {{ servicio.duracion_min }} min
-      </span>
+  <div class="p-6 flex flex-col flex-grow">
+    <div class="mb-4">
+      <h3 class="logo-font text-xl text-[#1E3A5F] mb-1 tracking-tight group-hover:text-[#D4A373] transition-colors">
+        {{ servicio.nombre }}
+      </h3>
+      <div class="w-8 h-[1px] bg-[#D4A373] transition-all group-hover:w-16"></div>
     </div>
 
-    <button
-      (click)="onVerDetalle()"
-      class="w-full bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-full transition-colors duration-300">
-      Ver detalle
-    </button>
+    <p class="text-gray-400 text-xs font-light mb-8 line-clamp-2 leading-relaxed italic">
+      "{{ servicio.descripcion }}"
+    </p>
+
+    <div class="mt-auto">
+      <div class="flex flex-col mb-6">
+        <span class="text-[9px] uppercase tracking-[0.2em] text-[#D4A373] font-bold mb-1">Inversión</span>
+        <span class="text-[#1E3A5F] font-black text-2xl tracking-tighter">
+          {{ servicio.precio | precioMxn }}
+        </span>
+      </div>
+
+      <button
+        (click)="onVerDetalle()"
+        class="w-full bg-[#1E3A5F] text-white py-3.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-300 shadow-md group-hover:bg-[#D4A373] group-hover:shadow-lg active:scale-95">
+        Ver detalle
+      </button>
+    </div>
   </div>
 
 </div>

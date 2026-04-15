@@ -1,0 +1,54 @@
+/* Importamos las fuentes solo para este componente */
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Nunito:wght@400;500;600;700&display=swap');
+
+/* Referencia a Tailwind v4 */
+@reference "tailwindcss";
+
+/* Aplicamos la fuente base 'Nunito' solo a este componente */
+:host {
+  display: block;
+  font-family: 'Nunito', sans-serif;
+}
+
+/* Fuente elegante para el Logo (tipo Lora) */
+.logo-font {
+  font-family: 'Lora', serif;
+}
+
+/* Links de navegación con efecto sutil */
+.nav-link {
+  @apply text-[#1F2937] text-sm font-medium tracking-wide relative pb-1
+         hover:text-[#1E3A5F] transition-all duration-300 ease-in-out;
+}
+
+/* Línea decorativa dorada en hover */
+.nav-link::after {
+  content: '';
+  @apply absolute left-0 bottom-0 h-[1.5px] w-0 bg-[#D4A373] transition-all duration-300;
+}
+
+.nav-link:hover::after,
+.active-link::after {
+  @apply w-full;
+}
+
+.active-link {
+  @apply text-[#1E3A5F] font-bold;
+}
+
+/* Botón Dorado (Inspirado en el botón del volante) */
+.btn-gold {
+  @apply bg-[#D4A373] text-white px-6 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-[0.1em]
+         shadow-sm hover:bg-[#bc8b5a] hover:shadow-md hover:-translate-y-0.5 transition-all active:scale-95;
+}
+
+/* Botón de login estilo minimalista */
+.btn-login {
+  @apply text-[#1E3A5F] border border-[#1E3A5F] px-5 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider
+         hover:bg-[#1E3A5F] hover:text-white transition-all;
+}
+
+/* Menú móvil */
+.mobile-link {
+  @apply block w-full text-left py-4 px-6 text-[#1F2937] font-medium border-b border-gray-50 hover:bg-white;
+}

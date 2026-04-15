@@ -44,11 +44,21 @@
 
           <!-- Hora específica -->
           @if (tipo?.value === 'horario') {
-            <div class="mb-6">
-              <label class="block text-stone-600 text-sm mb-2">Hora a bloquear</label>
-              <input type="time" formControlName="hora"
-                class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500"/>
+            <div class="mb-6 grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-stone-600 text-sm mb-2">Hora de inicio</label>
+                <input type="time" formControlName="hora_inicio"
+                  class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500"/>
+              </div>
+              <div>
+                <label class="block text-stone-600 text-sm mb-2">Hora de fin</label>
+                <input type="time" formControlName="hora_fin"
+                  class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500"/>
+              </div>
             </div>
+            @if ((hora_inicio?.invalid && hora_inicio?.touched) || (hora_fin?.invalid && hora_fin?.touched)) {
+              <p class="text-red-400 text-xs mt-1 ml-2">Debes indicar la hora de inicio y fin</p>
+            }
           }
 
           <!-- Motivo -->
@@ -88,7 +98,7 @@
                         {{ diasSemana[bloqueo.dia_semana].nombre }}s
                       }
                     } @else {
-                      🕐 {{ bloqueo.hora }}
+                      🕐 {{ bloqueo.hora_inicio }} - {{ bloqueo.hora_fin }}
                     }
                   </p>
                   <p class="text-stone-400 text-xs mt-1">{{ bloqueo.motivo }}</p>

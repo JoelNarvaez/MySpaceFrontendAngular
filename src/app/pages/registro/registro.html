@@ -1,0 +1,93 @@
+<section class="min-h-screen bg-[#F5F5F4] flex items-center justify-center py-16 px-4 relative overflow-hidden">
+  
+  <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-[#D4A373]/5 rounded-full blur-3xl"></div>
+
+  <div class="bg-white rounded-[2.5rem] shadow-2xl p-10 md:p-12 w-full max-w-md border border-gray-100 relative z-10">
+
+    <div class="text-center mb-10">
+      <h1 class="logo-font text-4xl text-[#1E3A5F] tracking-tighter leading-none">MY SPACE</h1>
+      <div class="flex items-center justify-center gap-2 mt-2">
+        <div class="h-[1px] w-4 bg-[#D4A373]"></div>
+        <span class="text-[10px] uppercase tracking-[0.4em] font-bold text-[#D4A373]">Unirse a la experiencia</span>
+        <div class="h-[1px] w-4 bg-[#D4A373]"></div>
+      </div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="registrarse()" class="space-y-5">
+
+      <div>
+        <label class="block text-[#1E3A5F] text-[10px] uppercase tracking-[0.2em] font-bold mb-2 ml-4">Nombre completo</label>
+        <input
+          type="text"
+          formControlName="nombre"
+          placeholder="Tu nombre"
+          class="w-full border border-gray-200 bg-[#F5F5F4]/50 rounded-full px-6 py-3.5 focus:outline-none focus:border-[#D4A373] focus:ring-1 focus:ring-[#D4A373] transition-all text-[#1E3A5F] placeholder:text-gray-300 text-sm"/>
+        @if (nombre?.invalid && nombre?.touched) {
+          <p class="text-red-400 text-[9px] uppercase tracking-wider mt-1 ml-4 font-bold">Campo requerido</p>
+        }
+      </div>
+
+      <div>
+        <label class="block text-[#1E3A5F] text-[10px] uppercase tracking-[0.2em] font-bold mb-2 ml-4">Correo electrónico</label>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="ejemplo@correo.com"
+          class="w-full border border-gray-200 bg-[#F5F5F4]/50 rounded-full px-6 py-3.5 focus:outline-none focus:border-[#D4A373] focus:ring-1 focus:ring-[#D4A373] transition-all text-[#1E3A5F] placeholder:text-gray-300 text-sm"/>
+        @if (email?.invalid && email?.touched) {
+          <p class="text-red-400 text-[9px] uppercase tracking-wider mt-1 ml-4 font-bold">Email inválido</p>
+        }
+      </div>
+
+      <div>
+        <label class="block text-[#1E3A5F] text-[10px] uppercase tracking-[0.2em] font-bold mb-2 ml-4">Teléfono</label>
+        <input
+          type="tel"
+          formControlName="telefono"
+          placeholder="10 dígitos"
+          class="w-full border border-gray-200 bg-[#F5F5F4]/50 rounded-full px-6 py-3.5 focus:outline-none focus:border-[#D4A373] transition-all text-[#1E3A5F] text-sm"/>
+        @if (telefono?.invalid && telefono?.touched) {
+          <p class="text-red-400 text-[9px] uppercase tracking-wider mt-1 ml-4 font-bold">Revisar número</p>
+        }
+      </div>
+
+      <div>
+        <label class="block text-[#1E3A5F] text-[10px] uppercase tracking-[0.2em] font-bold mb-2 ml-4">Contraseña</label>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="••••••••"
+          class="w-full border border-gray-200 bg-[#F5F5F4]/50 rounded-full px-6 py-3.5 focus:outline-none focus:border-[#D4A373] transition-all text-[#1E3A5F] text-sm"/>
+        @if (password?.invalid && password?.touched) {
+          <p class="text-red-400 text-[9px] uppercase tracking-wider mt-1 ml-4 font-bold">Mín. 6 caracteres</p>
+        }
+      </div>
+
+      <div class="mb-6">
+        <label class="block text-[#1E3A5F] text-[10px] uppercase tracking-[0.2em] font-bold mb-2 ml-4">Confirmar contraseña</label>
+        <input
+          type="password"
+          formControlName="confirmarPassword"
+          placeholder="••••••••"
+          class="w-full border border-gray-200 bg-[#F5F5F4]/50 rounded-full px-6 py-3.5 focus:outline-none focus:border-[#D4A373] transition-all text-[#1E3A5F] text-sm"/>
+        @if (form.errors?.['passwordsNoCoinciden'] && confirmarPassword?.touched) {
+          <p class="text-red-400 text-[9px] uppercase tracking-wider mt-1 ml-4 font-bold">No coinciden</p>
+        }
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="cargando"
+        class="w-full bg-[#1E3A5F] hover:bg-[#D4A373] disabled:bg-gray-200 text-white py-4 rounded-full text-xs font-bold uppercase tracking-[0.3em] transition-all duration-500 shadow-xl hover:-translate-y-1 active:scale-95 cursor-pointer">
+        {{ cargando ? 'Creando cuenta...' : 'Crear Cuenta' }}
+      </button>
+
+    </form>
+
+    <p class="text-center text-gray-400 text-[11px] uppercase tracking-widest mt-8">
+      ¿Ya eres miembro?
+      <a routerLink="/login" class="text-[#D4A373] hover:text-[#1E3A5F] font-bold transition-colors ml-1">Inicia sesión</a>
+    </p>
+
+  </div>
+</section>

@@ -11,6 +11,7 @@ export const routes: Routes = [
     { path: 'nosotros', loadComponent: () => import('./pages/nosotros/nosotros').then(m => m.Nosotros) },
     { path: 'contacto', loadComponent: () => import('./pages/contacto/contacto').then(m => m.Contacto) },
     { path: 'login', loadComponent: () => import('./pages/login/login').then(m => m.Login) },
+    { path: 'registro', loadComponent: () => import('./pages/registro/registro').then(m => m.Registro) },
     
     // Rutas protegidas - usuario
     { path: 'agendar', loadComponent: () => import('./pages/agendar/agendar').then(m => m.Agendar), canActivate: [authGuard] },

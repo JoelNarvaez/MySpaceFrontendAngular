@@ -1,19 +1,23 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
+
 export class Login {
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private authService = inject(Auth);
+
+  cargando = false;
 
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -29,47 +33,46 @@ export class Login {
       return;
     }
 
-    // Mock login — cuando el back esté listo esto se reemplaza por una llamada HTTP
+    this.cargando = true;
     const { email, password } = this.form.value;
 
-    if (email === 'admin@spa.com' && password === 'admin123') {
-      this.authService.login({
-        id: 1,
-        nombre: 'Administrador',
-        email: email!,
-        rol: 'admin',
-        token: 'mock-token-admin'
-      });
-      Swal.fire({
-        icon: 'success',
-        title: '¡Bienvenido Admin!',
-        showConfirmButton: false,
-        timer: 1500
-      }).then(() => this.router.navigate(['/admin/calendario']));
+    this.authService.login({ email: email!, password: password! }).subscribe({
+      next: (usuario) => {
+        this.cargando = false;
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+        const destino = returnUrl || (usuario.rol === 'admin' ? '/admin/calendario' : '/agendar');
+        const nombre = usuario.nombre || usuario.email || 'Usuario';
 
-    } else if (email === 'usuario@spa.com' && password === 'user123') {
-      this.authService.login({
-        id: 2,
-        nombre: 'María López',
-        email: email!,
-        rol: 'usuario',
-        token: 'mock-token-user'
-      });
-      Swal.fire({
-        icon: 'success',
-        title: '¡Bienvenida!',
-        text: 'Ya puedes agendar tu cita',
-        showConfirmButton: false,
-        timer: 1500
-      }).then(() => this.router.navigate(['/agendar']));
-
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Credenciales incorrectas',
-        text: 'Verifica tu email y contraseña',
-        confirmButtonColor: '#0d9488'
-      });
-    }
+        Swal.fire({
+          icon: 'success',
+          iconColor: '#D4A373', // Dorado
+          title: `<span class="logo-font" style="color: #1E3A5F; font-size: 1.5rem; letter-spacing: 0.05em;">BIENVENIDO, ${nombre.toUpperCase()}</span>`,
+          text: 'Es un placer tenerte de vuelta.',
+          showConfirmButton: false,
+          timer: 1800,
+          background: '#F5F5F4',
+          backdrop: `rgba(30, 58, 95, 0.4)`,
+          customClass: {
+            popup: 'rounded-[2rem] border-none shadow-2xl'
+          }
+        }).then(() => this.router.navigateByUrl(destino));
+      },
+      error: () => {
+        this.cargando = false;
+        Swal.fire({
+          icon: 'error',
+          iconColor: '#1E3A5F', // Navy
+          title: '<span class="logo-font" style="color: #1E3A5F;">ERROR DE ACCESO</span>',
+          text: 'Verifica tu email y contraseña',
+          confirmButtonText: 'REINTENTAR',
+          confirmButtonColor: '#1E3A5F', // Botón Navy
+          background: '#F5F5F4',
+          customClass: {
+            popup: 'rounded-[2rem] shadow-2xl',
+            confirmButton: 'rounded-full px-10 py-3 uppercase tracking-[0.2em] text-[10px] font-bold'
+          }
+        });
+      }
+    });
   }
 }
