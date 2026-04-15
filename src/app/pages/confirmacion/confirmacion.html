@@ -1,41 +1,48 @@
-<section class="min-h-screen bg-stone-50 flex items-center justify-center py-16 px-8">
-  <div class="bg-white rounded-2xl shadow-md p-10 max-w-lg w-full text-center">
+<section class="min-h-screen bg-[#F5F5F4] flex items-center justify-center py-16 px-8 relative overflow-hidden">
+  
+  <div class="absolute top-0 right-0 w-64 h-64 bg-[#D4A373]/5 rounded-full -mr-32 -mt-32"></div>
+  <div class="absolute bottom-0 left-0 w-96 h-96 bg-[#1E3A5F]/5 rounded-full -ml-48 -mb-48"></div>
 
+  <div class="bg-white rounded-[2.5rem] shadow-2xl p-10 md:p-14 max-w-lg w-full text-center border border-gray-100 relative z-10">
 
-    <h1 class="text-3xl font-light text-stone-700 mb-2 tracking-widest">¡CITA CONFIRMADA!</h1>
-    <p class="text-stone-400 mb-8">Te esperamos con gusto</p>
+    <div class="w-20 h-20 bg-[#F5F5F4] rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
+      <span class="text-4xl">✨</span>
+    </div>
 
-    <!-- Resumen -->
-    <div class="bg-stone-50 rounded-xl p-6 text-left mb-8">
-      <div class="flex justify-between py-3 border-b border-stone-100">
-        <span class="text-stone-400 text-sm">Nombre</span>
-        <span class="text-stone-700 font-medium">{{ nombre }}</span>
+    <h1 class="logo-font text-3xl text-[#1E3A5F] mb-2 tracking-[0.15em] uppercase">¡Cita Confirmada!</h1>
+    <p class="text-gray-400 font-light italic mb-10">Tu espacio de bienestar te espera</p>
+
+    <div class="bg-[#F5F5F4]/50 rounded-3xl p-8 text-left mb-10 border border-dashed border-gray-200">
+      <div class="flex justify-between py-4 border-b border-gray-100">
+        <span class="text-[10px] uppercase tracking-widest text-[#D4A373] font-bold">Cliente</span>
+        <span class="text-[#1E3A5F] font-bold tracking-tight">{{ nombre }}</span>
       </div>
-      <div class="flex justify-between py-3 border-b border-stone-100">
-        <span class="text-stone-400 text-sm">Servicio</span>
-        <span class="text-stone-700 font-medium">{{ servicio }}</span>
+      <div class="flex justify-between py-4 border-b border-gray-100">
+        <span class="text-[10px] uppercase tracking-widest text-[#D4A373] font-bold">Tratamiento</span>
+        <span class="text-[#1E3A5F] font-bold tracking-tight">{{ servicio }}</span>
       </div>
-      <div class="flex justify-between py-3 border-b border-stone-100">
-        <span class="text-stone-400 text-sm">Fecha</span>
-        <span class="text-stone-700 font-medium">{{ fecha }}</span>
+      <div class="flex justify-between py-4 border-b border-gray-100">
+        <span class="text-[10px] uppercase tracking-widest text-[#D4A373] font-bold">Fecha</span>
+        <span class="text-[#1E3A5F] font-bold tracking-tight">{{ fecha }}</span>
       </div>
-      <div class="flex justify-between py-3">
-        <span class="text-stone-400 text-sm">Hora</span>
-        <span class="text-stone-700 font-medium">{{ hora }}</span>
+      <div class="flex justify-between py-4">
+        <span class="text-[10px] uppercase tracking-widest text-[#D4A373] font-bold">Hora</span>
+        <span class="text-[#1E3A5F] font-bold tracking-tight">{{ hora }}</span>
       </div>
     </div>
 
-    <!-- Botones -->
-    <div class="flex gap-4">
+    <div class="flex flex-col sm:flex-row gap-4">
       <button (click)="irAMisCitas()"
-        class="flex-1 border border-teal-600 text-teal-600 hover:bg-teal-600 hover:text-white py-3 rounded-full transition-colors duration-300">
-        Ver mis citas
+        class="flex-1 border-2 border-[#1E3A5F] text-[#1E3A5F] hover:bg-[#1E3A5F] hover:text-white py-3.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-300">
+        Mis Citas
       </button>
       <button (click)="irAInicio()"
-        class="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-full transition-colors duration-300">
-        Ir al inicio
+        class="flex-1 bg-[#D4A373] hover:bg-[#bc8b5a] text-white py-3.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-300 shadow-lg shadow-[#D4A373]/20 hover:-translate-y-0.5">
+        Finalizar
       </button>
     </div>
+
+    <p class="mt-8 text-[9px] text-gray-300 uppercase tracking-widest">Gracias por elegir My Space</p>
 
   </div>
 </section>

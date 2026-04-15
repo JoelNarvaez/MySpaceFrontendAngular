@@ -11,6 +11,7 @@ import { Servicio } from '../../interfaces/servicio';
   templateUrl: './servicios.html',
   styleUrl: './servicios.css'
 })
+
 export class ServiciosSeccion implements OnInit {
   private serviciosService = inject(Servicios);
   private router = inject(Router);

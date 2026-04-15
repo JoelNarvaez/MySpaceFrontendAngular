@@ -1,75 +1,102 @@
-<!-- Hero section -->
-<section class="relative h-screen bg-cover bg-center flex items-center justify-center"
-  style="background-image: url('hero-image.jpg')">
+<section class="relative h-screen flex items-center justify-center overflow-hidden bg-black">
+  <div class="absolute inset-0 z-0">
+    @for (img of imagenes; track $index) {
+      <img [src]="img" 
+           alt="My Space" 
+           class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out"
+           [class.opacity-100]="$index === indiceImagenActual"
+           [class.opacity-0]="$index !== indiceImagenActual">
+    }
+    <div class="absolute inset-0 bg-[#1E3A5F]/40 z-10"></div>
+  </div>
 
-  <!-- Overlay oscuro -->
-  <div class="absolute inset-0 bg-black/40"></div>
-
-  <!-- Contenido -->
-  <div class="relative z-10 text-center text-white px-4">
-    <div class="border-2 border-white/70 px-12 py-10 max-w-2xl mx-auto">
-      <h1 class="text-5xl font-light mb-4 tracking-widest">MySpace</h1>
-      <p class="text-xl font-light mb-8 italic">
-        "Aquí va el eslogan -- Donde el tiempo se detiene y el alma descansa"
-      </p>
-      <button routerLink="/agendar"
-        class="bg-teal-600/80 hover:bg-teal-600 text-white px-8 py-3 rounded-full text-lg transition-all duration-300 cursor-pointer">
+  <div class="relative z-20 text-center text-white px-4">
+    <div class="backdrop-blur-md bg-white/10 border border-white/30 px-8 py-12 md:px-20 md:py-16 max-w-3xl mx-auto rounded-sm shadow-2xl">
+      <div class="flex flex-col items-center mb-6">
+        <h1 class="logo-font text-5xl md:text-7xl tracking-tighter leading-none">MY SPACE</h1>
+        <span class="text-xs uppercase tracking-[0.4em] mt-2 font-bold text-[#D8E0F2]">Massage Therapy</span>
+      </div>
+      <p class="text-lg md:text-xl font-light mb-10 italic">"Donde el tiempo se detiene y el alma descansa"</p>
+      
+      <a routerLink="/agendar" 
+         class="inline-block bg-[#D4A373] hover:bg-[#1E3A5F] text-white px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.3em] transition-all duration-500 shadow-lg hover:shadow-[#D4A373]/40 hover:-translate-y-1 active:scale-95">
         ¡Agenda tu cita!
-      </button>
+      </a>
     </div>
   </div>
 </section>
 
-<!-- Sección servicios destacados -->
-<section class="py-16 px-8 bg-stone-50">
-  <h2 class="text-3xl text-center text-stone-700 font-light mb-2 tracking-widest">NUESTROS SERVICIOS</h2>
-  <p class="text-center text-stone-400 mb-12">Descubre una experiencia única de bienestar</p>
+<section class="py-24 px-6 bg-[#F5F5F4]">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16">
+    
+    <div class="lg:col-span-7">
+      <div class="mb-10">
+        <h2 class="logo-font text-3xl text-[#1E3A5F] uppercase tracking-widest flex items-center gap-4">
+          Nuestros Servicios <span class="text-[#D4A373]">.</span>
+        </h2>
+        <div class="h-[1px] w-20 bg-[#D4A373] mt-2"></div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        @for (servicio of serviciosAleatorios(); track servicio.id) {
+          <app-tarjeta-servicio
+            [servicio]="servicio"
+            (verDetalle)="irADetalle($event)" />
+        } @empty {
+          <div class="col-span-full py-10 text-center">
+            <p class="text-gray-400 italic logo-font">Preparando sugerencias para tu bienestar...</p>
+          </div>
+        }
+      </div>
 
-  <div class="grid grid-cols-3 gap-8 max-w-5xl mx-auto">
-    <div class="text-center p-6">
-      <div class="text-5xl mb-4">💆</div>
-      <h3 class="text-lg font-medium text-stone-700 mb-2">Masajes</h3>
-      <p class="text-stone-400 text-sm">Relaja cuerpo y mente con nuestros masajes terapéuticos</p>
+      <div class="mt-12">
+        <a routerLink="/servicios" class="group inline-flex items-center gap-3 text-[#1E3A5F] font-bold text-xs uppercase tracking-[0.2em] hover:text-[#D4A373] transition-colors">
+          Explorar todos los servicios 
+          <span class="group-hover:translate-x-2 transition-transform duration-300">→</span>
+        </a>
+      </div>
     </div>
-    <div class="text-center p-6">
-      <div class="text-5xl mb-4">✨</div>
-      <h3 class="text-lg font-medium text-stone-700 mb-2">Faciales</h3>
-      <p class="text-stone-400 text-sm">Tratamientos para una piel radiante y saludable</p>
-    </div>
-    <div class="text-center p-6">
-      <div class="text-5xl mb-4">🌿</div>
-      <h3 class="text-lg font-medium text-stone-700 mb-2">Aromaterapia</h3>
-      <p class="text-stone-400 text-sm">Equilibra tu energía con aceites esenciales naturales</p>
-    </div>
-  </div>
 
-  <div class="text-center mt-10">
-    <a routerLink="/servicios"
-      class="border border-teal-600 text-teal-600 hover:bg-teal-600 hover:text-white px-8 py-3 rounded-full transition-all duration-300">
-      Ver todos los servicios
-    </a>
-  </div>
-</section>
+    <div class="lg:col-span-5">
+      <div class="bg-[#1E3A5F] text-white p-10 md:p-14 rounded-3xl shadow-2xl relative overflow-hidden border border-white/5">
+        <div class="absolute -right-16 -top-16 w-48 h-48 bg-white/5 rounded-full"></div>
+        
+        <h3 class="logo-font text-2xl mb-12 tracking-widest uppercase border-b border-white/10 pb-4">
+          Horarios <span class="text-[#D4A373]">.</span>
+        </h3>
+        
+        <div class="space-y-10">
+          <div class="flex justify-between items-end border-b border-white/5 pb-2">
+            <div>
+              <p class="text-[#D4A373] text-[10px] uppercase tracking-[0.3em] font-bold mb-1">Días Laborales</p>
+              <span class="text-gray-200 font-light">Lunes a Viernes</span>
+            </div>
+            <span class="text-xl font-medium tracking-tighter">10am – 8pm</span>
+          </div>
 
-<!-- Sección por qué elegirnos -->
-<section class="py-16 px-8 bg-white">
-  <h2 class="text-3xl text-center text-stone-700 font-light mb-12 tracking-widest">¿POR QUÉ ELEGIRNOS?</h2>
+          <div class="flex justify-between items-end border-b border-white/5 pb-2">
+            <div>
+              <p class="text-[#D4A373] text-[10px] uppercase tracking-[0.3em] font-bold mb-1">Fin de Semana</p>
+              <span class="text-gray-200 font-light">Sábados</span>
+            </div>
+            <span class="text-xl font-medium tracking-tighter">10am – 2pm</span>
+          </div>
+        </div>
 
-  <div class="grid grid-cols-3 gap-8 max-w-5xl mx-auto">
-    <div class="text-center">
-      <div class="text-4xl mb-3">🏆</div>
-      <h3 class="font-medium text-stone-700 mb-2">Experiencia</h3>
-      <p class="text-stone-400 text-sm">Más de 10 años brindando bienestar a nuestros clientes</p>
+        <div class="mt-12 p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm">
+          <div class="flex items-start gap-4">
+            <div class="w-1.5 h-1.5 bg-[#D4A373] rounded-full mt-2"></div>
+            <div>
+              <p class="text-[10px] uppercase tracking-[0.2em] text-[#D4A373] font-bold mb-2">Encuéntranos en</p>
+              <p class="text-xs leading-relaxed text-gray-300">
+                Av. Independencia 225A Col. Industrial. <br>
+                <span class="text-white font-medium">Zona Centro, Aguascalientes.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="text-center">
-      <div class="text-4xl mb-3">👐</div>
-      <h3 class="font-medium text-stone-700 mb-2">Profesionales</h3>
-      <p class="text-stone-400 text-sm">Especialistas certificados en cada tratamiento</p>
-    </div>
-    <div class="text-center">
-      <div class="text-4xl mb-3">🌱</div>
-      <h3 class="font-medium text-stone-700 mb-2">Natural</h3>
-      <p class="text-stone-400 text-sm">Productos 100% naturales y libres de químicos dañinos</p>
-    </div>
+
   </div>
 </section>

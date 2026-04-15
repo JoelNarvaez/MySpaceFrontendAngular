@@ -52,10 +52,17 @@ export class Registro {
         this.cargando = false;
         Swal.fire({
           icon: 'success',
-          title: '¡Cuenta creada!',
-          text: 'Ya puedes agendar tu cita',
+          iconColor: '#D4A373', 
+          title: '<span class="logo-font" style="color: #1E3A5F; font-size: 1.5rem; tracking: 0.1em;">¡CUENTA CREADA!</span>',
+          text: 'Tu espacio de bienestar te espera.',
           showConfirmButton: false,
-          timer: 1500
+          timer: 2000,
+          background: '#F5F5F4', // Color hueso de fondo
+          backdrop: `rgba(30, 58, 95, 0.4)`, // Fondo oscuro Navy con transparencia
+          customClass: {
+            popup: 'rounded-3xl border-none shadow-2xl',
+            title: 'uppercase'
+          }
         }).then(() => this.router.navigate(['/agendar']));
       },
       error: (err) => {
@@ -63,11 +70,19 @@ export class Registro {
         const mensaje = err.status === 409
           ? 'Este correo ya está registrado'
           : 'No se pudo crear la cuenta, intenta de nuevo';
+          
         Swal.fire({
           icon: 'error',
-          title: 'Error',
+          iconColor: '#1E3A5F', // Navy para el error
+          title: '<span class="logo-font" style="color: #1E3A5F;">Oops...</span>',
           text: mensaje,
-          confirmButtonColor: '#0d9488'
+          confirmButtonText: 'ENTENDIDO',
+          confirmButtonColor: '#1E3A5F', // Botón Navy
+          background: '#F5F5F4',
+          customClass: {
+            popup: 'rounded-3xl shadow-2xl',
+            confirmButton: 'rounded-full px-8 py-3 uppercase tracking-widest text-xs font-bold'
+          }
         });
       }
     });

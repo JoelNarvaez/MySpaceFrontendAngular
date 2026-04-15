@@ -1,110 +1,97 @@
-<section class="min-h-screen bg-stone-50 py-16 px-8">
+<section class="min-h-screen bg-[#F5F5F4] py-20 px-8">
   <div class="max-w-2xl mx-auto">
 
-    <h1 class="text-4xl text-center text-stone-700 font-light mb-2 tracking-widest">AGENDA TU CITA</h1>
-    <p class="text-center text-stone-400 mb-10">Selecciona el servicio, fecha y horario de tu preferencia</p>
+    <div class="text-center mb-12">
+      <h1 class="logo-font text-4xl text-[#1E3A5F] mb-3 tracking-[0.2em] uppercase">
+        Agenda tu Cita<span class="text-[#D4A373]">.</span>
+      </h1>
+      <p class="text-gray-500 font-light italic tracking-wide">
+        Selecciona el servicio, fecha y horario de tu preferencia
+      </p>
+      <div class="w-20 h-[1px] bg-[#D4A373] mx-auto mt-6"></div>
+    </div>
 
-    <form [formGroup]="form" (ngSubmit)="guardarCita()" class="bg-white rounded-2xl shadow-md p-8">
+    <form [formGroup]="form" (ngSubmit)="guardarCita()" class="bg-white rounded-[2rem] shadow-xl p-10 border border-gray-100">
 
-      <!-- Nombre -->
-      <div class="mb-6">
-        <label class="block text-stone-600 text-sm mb-2">Nombre completo</label>
-        <input type="text" formControlName="nombre" placeholder="Tu nombre completo"
-          class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500 transition-colors"/>
+      <div class="mb-8">
+        <label class="block text-[#1E3A5F] text-[10px] uppercase tracking-[0.2em] font-bold mb-3 ml-4">Nombre completo</label>
+        <input type="text" formControlName="nombre" placeholder="Tu nombre"
+          class="w-full border border-gray-200 bg-[#F5F5F4]/30 rounded-full px-6 py-4 focus:outline-none focus:border-[#D4A373] focus:ring-1 focus:ring-[#D4A373] transition-all text-[#1E3A5F] placeholder:text-gray-300"/>
         @if (nombre?.invalid && nombre?.touched) {
-          @if (nombre?.errors?.['required']) {
-            <p class="text-red-400 text-xs mt-1 ml-2">El nombre es obligatorio</p>
-          }
-          @if (nombre?.errors?.['minlength']) {
-            <p class="text-red-400 text-xs mt-1 ml-2">Mínimo 3 caracteres</p>
-          }
+          <p class="text-red-400 text-[10px] uppercase tracking-wider mt-2 ml-4 font-bold">Dato requerido</p>
         }
       </div>
 
-      <!-- Email -->
-      <div class="mb-6">
-        <label class="block text-stone-600 text-sm mb-2">Correo electrónico</label>
-        <input type="email" formControlName="email" placeholder="ejemplo@correo.com"
-          class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500 transition-colors"/>
-        @if (email?.invalid && email?.touched) {
-          @if (email?.errors?.['required']) {
-            <p class="text-red-400 text-xs mt-1 ml-2">El correo es obligatorio</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div>
+          <label class="block text-[#1E3A5F] text-[10px] uppercase tracking-[0.2em] font-bold mb-3 ml-4">Correo electrónico</label>
+          <input type="email" formControlName="email" placeholder="ejemplo@correo.com"
+            class="w-full border border-gray-200 bg-[#F5F5F4]/30 rounded-full px-6 py-4 focus:outline-none focus:border-[#D4A373] transition-all text-[#1E3A5F] placeholder:text-gray-300"/>
+          @if (email?.invalid && email?.touched) {
+            <p class="text-red-400 text-[10px] uppercase tracking-wider mt-2 ml-4 font-bold">Email inválido</p>
           }
-          @if (email?.errors?.['email']) {
-            <p class="text-red-400 text-xs mt-1 ml-2">Ingresa un correo válido</p>
+        </div>
+        <div>
+          <label class="block text-[#1E3A5F] text-[10px] uppercase tracking-[0.2em] font-bold mb-3 ml-4">Teléfono</label>
+          <input type="tel" formControlName="telefono" placeholder="10 dígitos"
+            class="w-full border border-gray-200 bg-[#F5F5F4]/30 rounded-full px-6 py-4 focus:outline-none focus:border-[#D4A373] transition-all text-[#1E3A5F] placeholder:text-gray-300"/>
+          @if (telefono?.invalid && telefono?.touched) {
+            <p class="text-red-400 text-[10px] uppercase tracking-wider mt-2 ml-4 font-bold">Revisar número</p>
           }
-        }
+        </div>
       </div>
 
-      <!-- Teléfono -->
-      <div class="mb-6">
-        <label class="block text-stone-600 text-sm mb-2">Teléfono (10 dígitos)</label>
-        <input type="tel" formControlName="telefono" placeholder="4491234567"
-          class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500 transition-colors"/>
-        @if (telefono?.invalid && telefono?.touched) {
-          @if (telefono?.errors?.['required']) {
-            <p class="text-red-400 text-xs mt-1 ml-2">El teléfono es obligatorio</p>
-          }
-          @if (telefono?.errors?.['pattern']) {
-            <p class="text-red-400 text-xs mt-1 ml-2">Ingresa 10 dígitos sin espacios</p>
-          }
-        }
+      <div class="mb-8">
+        <label class="block text-[#1E3A5F] text-[10px] uppercase tracking-[0.2em] font-bold mb-3 ml-4">Servicio deseado</label>
+        <div class="relative">
+          <select formControlName="id_servicio" (change)="cargarHorarios()"
+            class="w-full border border-gray-200 bg-[#F5F5F4]/30 rounded-full px-6 py-4 focus:outline-none focus:border-[#D4A373] appearance-none transition-all text-[#1E3A5F]">
+            <option value="">Selecciona un tratamiento</option>
+            @for (servicio of servicios; track servicio.id) {
+              <option [value]="servicio.id">{{ servicio.nombre }}</option>
+            }
+          </select>
+          <div class="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-[#D4A373]">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </div>
+        </div>
       </div>
 
-      <!-- Servicio -->
-      <div class="mb-6">
-        <label class="block text-stone-600 text-sm mb-2">Servicio</label>
-        <select formControlName="id_servicio" (change)="cargarHorarios()"
-          class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500 transition-colors">
-          <option value="">Selecciona un servicio</option>
-          @for (servicio of servicios; track servicio.id) {
-            <option [value]="servicio.id">{{ servicio.nombre }}</option>
-          }
-        </select>
-        @if (id_servicio?.invalid && id_servicio?.touched) {
-          <p class="text-red-400 text-xs mt-1 ml-2">Selecciona un servicio</p>
-        }
-      </div>
-
-      <!-- Fecha -->
-      <div class="mb-6">
-        <label class="block text-stone-600 text-sm mb-2">Fecha</label>
+      <div class="mb-10">
+        <label class="block text-[#1E3A5F] text-[10px] uppercase tracking-[0.2em] font-bold mb-3 ml-4">Fecha de visita</label>
         <input type="date" formControlName="fecha" (change)="cargarHorarios()"
-          class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500 transition-colors"/>
+          class="w-full border border-gray-200 bg-[#F5F5F4]/30 rounded-full px-6 py-4 focus:outline-none focus:border-[#D4A373] transition-all text-[#1E3A5F] custom-calendar-icon"/>
         @if (fecha?.invalid && fecha?.touched) {
-          @if (fecha?.errors?.['required']) {
-            <p class="text-red-400 text-xs mt-1 ml-2">La fecha es obligatoria</p>
-          }
-          @if (fecha?.errors?.['fechaPasada']) {
-            <p class="text-red-400 text-xs mt-1 ml-2">La fecha no puede ser en el pasado</p>
-          }
+          <p class="text-red-400 text-[10px] uppercase tracking-wider mt-2 ml-4 font-bold">Selecciona una fecha válida</p>
         }
       </div>
 
-      <!-- Horarios disponibles -->
       @if (cargandoHorarios) {
-        <p class="text-center text-stone-400 mb-6">Cargando horarios...</p>
+        <div class="flex flex-col items-center mb-8">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#D4A373]"></div>
+          <p class="text-[10px] uppercase tracking-widest text-gray-400 mt-3">Consultando disponibilidad...</p>
+        </div>
       }
 
       @if (horarios.length > 0) {
-        <div class="mb-6">
-          <label class="block text-stone-600 text-sm mb-3">Horario disponible</label>
+        <div class="mb-10 p-6 bg-[#F5F5F4]/50 rounded-3xl border border-gray-100">
+          <label class="block text-[#1E3A5F] text-[10px] uppercase tracking-[0.2em] font-bold mb-6 text-center">Horarios disponibles</label>
           <app-selector-horario
             [horarios]="horarios"
             (horarioSeleccionado)="onHorarioSeleccionado($event)"/>
-          @if (hora?.invalid && hora?.touched) {
-            <p class="text-red-400 text-xs mt-2">Selecciona un horario</p>
-          }
+          
           @if (hora?.value) {
-            <p class="text-teal-600 text-sm mt-2 ml-2">✓ Horario seleccionado: {{ hora?.value }}</p>
+            <div class="flex items-center justify-center gap-2 mt-6 animate-bounce">
+              <span class="text-[#D4A373]">✓</span>
+              <p class="text-[#1E3A5F] font-bold text-xs uppercase tracking-widest">Confirmado: {{ hora?.value }}</p>
+            </div>
           }
         </div>
       }
 
-      <!-- Botón -->
       <button type="submit"
-        class="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-full text-lg transition-colors duration-300 mt-4 cursor-pointer">
-        Confirmar cita
+        class="w-full bg-[#1E3A5F] hover:bg-[#D4A373] text-white py-5 rounded-full text-xs font-bold uppercase tracking-[0.3em] transition-all duration-500 shadow-xl hover:-translate-y-1 active:scale-95 disabled:bg-gray-200 disabled:cursor-not-allowed">
+        Confirmar Experiencia
       </button>
 
     </form>
