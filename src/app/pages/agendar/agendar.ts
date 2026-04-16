@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Servicios } from '../../services/servicios';
@@ -30,6 +30,8 @@ export class Agendar implements OnInit {
   private serviciosService = inject(Servicios);
   private citasService = inject(Citas);
   private authService = inject(Auth);
+
+  private cd = inject(ChangeDetectorRef);
 
   servicios: Servicio[] = [];
   horarios: Horario[] = [];
@@ -82,14 +84,28 @@ export class Agendar implements OnInit {
     if (!fecha || !idServicio) return;
 
     this.cargandoHorarios = true;
-    this.citasService.getHorariosDisponibles(fecha, Number(idServicio)).subscribe(data => {
-      this.horarios = data;
+    this.citasService.getHorariosDisponibles(fecha, Number(idServicio)).subscribe((res: any) => {
+      this.horarios = res.data;
       this.cargandoHorarios = false;
+
+      this.cd.detectChanges();
+
+      if (!res.data || res.data.length === 0) {
+        Swal.fire({
+          icon: 'info',
+          title: 'Sin servicio',
+          text: 'Este día no hay horarios disponibles',
+          confirmButtonColor: '#0d9488'
+        });
+      }
     });
   }
 
   onHorarioSeleccionado(hora: string) {
-    this.form.patchValue({ hora });
+    setTimeout(() => {
+      this.form.patchValue({ hora });
+      this.cd.detectChanges();
+    }, 0);
   }
 
   guardarCita() {
@@ -128,6 +144,18 @@ export class Agendar implements OnInit {
         });
       },
       error: (err) => {
+        if (err.status === 401) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Sesión expirada',
+            text: 'Por favor inicia sesión nuevamente',
+            confirmButtonColor: '#0d9488'
+          }).then(() => {
+            this.router.navigate(['/login']);
+          });
+          return;
+        }
+
         const mensaje = err.status === 409
           ? 'Ese horario ya fue reservado, elige otro'
           : 'No se pudo agendar la cita, intenta de nuevo';
