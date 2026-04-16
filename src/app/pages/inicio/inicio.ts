@@ -7,7 +7,6 @@ import { Servicio } from '../../interfaces/servicio';
 
 @Component({
   selector: 'app-inicio',
-  standalone: true,
   imports: [RouterLink, CommonModule, TarjetaServicio], 
   templateUrl: './inicio.html',
   styleUrl: './inicio.css',

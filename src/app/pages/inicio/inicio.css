@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Nunito:wght@400;500;600;700&display=swap');
-
 @reference "tailwindcss";
 
 /* DEFINIR COMO UTILITY PARA QUE @APPLY FUNCIONE */
