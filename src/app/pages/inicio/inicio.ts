@@ -53,4 +53,11 @@ export class Inicio implements OnInit, OnDestroy {
   irADetalle(id: number) {
     this.router.navigate(['/servicio', id]);
   }
+
+    // Seccion de FAQ
+  faqAbierto: number | null = null;
+
+  toggleFAQ(index: number) {
+    this.faqAbierto = this.faqAbierto === index ? null : index;
+  }
 }

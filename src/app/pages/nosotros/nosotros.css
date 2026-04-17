@@ -1,0 +1,18 @@
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3 {
+  font-family: 'Lora', serif;
+}
+
+.lux-card {
+  background: #FAFAF9;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(0,0,0,0.03);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+}
+
+.lux-card:hover {
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+}

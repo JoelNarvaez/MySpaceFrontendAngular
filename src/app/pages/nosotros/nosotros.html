@@ -1,85 +1,159 @@
-<section class="min-h-screen bg-stone-50">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Lora:wght@400;500&display=swap" rel="stylesheet">
 
-  <!-- Hero -->
-  <div class="bg-teal-600 text-white py-20 px-8 text-center">
-    <h1 class="text-4xl font-light tracking-widest mb-4">SOBRE NOSOTROS</h1>
-    <p class="text-teal-100 text-lg max-w-2xl mx-auto">
-      Más de 10 años dedicados a tu bienestar y relajación
+<section class="bg-[#F8F7F5] min-h-screen">
+
+  <!-- HERO -->
+  <div class="bg-[#1E3A5F] text-white text-center py-32 md:py-36 px-6">
+    <h1 class="font-serif text-5xl md:text-6xl tracking-[0.35em] font-light">
+      SOBRE NOSOTROS
+    </h1>
+
+    <div class="w-50 h-[2px] bg-[#D4A373] mx-auto my-6"></div>
+
+    <p class="max-w-2xl mx-auto text-gray-300 leading-relaxed text-base">
+      Creamos experiencias de bienestar, equilibrio y sofisticación
+      desde hace muchos años.
     </p>
   </div>
 
-  <!-- Historia -->
-  <div class="max-w-4xl mx-auto py-16 px-8">
-    <div class="grid grid-cols-2 gap-12 items-center mb-16">
+  <!-- CONTENIDO -->
+  <div class="max-w-6xl mx-auto px-6 py-24">
+
+    <!-- HISTORIA -->
+    <div class="grid md:grid-cols-2 gap-20 items-center mb-28">
+
+      <!-- TEXTO -->
       <div>
-        <h2 class="text-3xl font-light text-stone-700 mb-6">Nuestra historia</h2>
-        <p class="text-stone-500 leading-relaxed mb-4">
-          MySpace nació en 2014 con una misión clara: crear un espacio donde cada persona
-          pudiera desconectarse del mundo y reconectar consigo misma.
+        <h2 class="font-serif text-3xl md:text-5xl text-[#1E3A5F] font-light">
+          Nuestra historia
+        </h2>
+
+        <div class="w-14 h-[2px] bg-[#D4A373] my-5"></div>
+
+        <p class="text-gray-600 leading-relaxed text-xl">
+          MySpace nació en 2021 con la visión de ofrecer un espacio donde cada persona
+          pudiera desconectarse del ritmo cotidiano y reconectar consigo misma.
         </p>
-        <p class="text-stone-500 leading-relaxed">
-          Desde entonces hemos atendido a clientes que confían en nosotros
-          para cuidar su bienestar físico y mental.
+
+        <p class="text-gray-600 leading-relaxed text-lg mt-5">
+          Con el paso del tiempo, nos hemos consolidado como un referente en bienestar,
+          brindando experiencias diseñadas para revitalizar cuerpo y mente en un entorno
+          sereno y profesional.
         </p>
       </div>
-      <div class="bg-teal-100 rounded-2xl h-64 flex items-center justify-center">
-        <span class="text-8xl">🌿</span>
+
+      <!-- CARRUSEL -->
+      <div class="relative rounded-2xl overflow-hidden shadow-lg h-[350px]">
+
+        <div class="absolute inset-0 z-0">
+
+          @for (item of imagenes; track $index) {
+
+            @if (item.tipo === 'img') {
+              <img
+                [src]="item.src"
+                class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
+                [class.opacity-100]="$index === indiceImagenActual"
+                [class.opacity-0]="$index !== indiceImagenActual">
+            }
+
+            @if (item.tipo === 'video') {
+              <video
+                [src]="item.src"
+                autoplay
+                muted
+                loop
+                playsinline
+                class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
+                [class.opacity-100]="$index === indiceImagenActual"
+                [class.opacity-0]="$index !== indiceImagenActual">
+              </video>
+            }
+
+          }
+
+          <div class="absolute inset-0 bg-[#1E3A5F]/40 z-10"></div>
+        </div>
+
       </div>
+
     </div>
 
-    <!-- Valores -->
-    <h2 class="text-3xl font-light text-stone-700 text-center mb-10">Nuestros valores</h2>
-    <div class="grid grid-cols-3 gap-8 mb-16">
-      <div class="bg-white rounded-2xl shadow-md p-6 text-center">
-        <div class="text-4xl mb-4">💚</div>
-        <h3 class="font-medium text-stone-700 mb-2">Bienestar</h3>
-        <p class="text-stone-400 text-sm">Tu salud y tranquilidad son nuestra prioridad</p>
-      </div>
-      <div class="bg-white rounded-2xl shadow-md p-6 text-center">
-        <div class="text-4xl mb-4">⭐</div>
-        <h3 class="font-medium text-stone-700 mb-2">Calidad</h3>
-        <p class="text-stone-400 text-sm">Productos naturales y técnicas certificadas</p>
-      </div>
-      <div class="bg-white rounded-2xl shadow-md p-6 text-center">
-        <div class="text-4xl mb-4">🤝</div>
-        <h3 class="font-medium text-stone-700 mb-2">Confianza</h3>
-        <p class="text-stone-400 text-sm">Un ambiente seguro y profesional para todos</p>
-      </div>
+    <!-- VALORES -->
+    <div class="text-center mb-16">
+      <h2 class="font-serif text-3xl md:text-4xl text-[#1E3A5F] font-light">
+        Nuestros valores
+      </h2>
+      <div class="w-20 h-[2px] bg-[#D4A373] mx-auto my-6"></div>
     </div>
 
-    <!-- Equipo -->
-    <h2 class="text-3xl font-light text-stone-700 text-center mb-10">Nuestro equipo</h2>
-    <div class="grid grid-cols-3 gap-8 mb-16">
-      <div class="bg-white rounded-2xl shadow-md p-6 text-center">
-        <div class="w-20 h-20 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <span class="text-3xl">👩</span>
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
+
+      <!-- CARD 1 -->
+      <div class="lux-card group p-10 text-center border border-transparent rounded-2xl
+                  transition-all duration-300 ease-out
+                  hover:shadow-xl hover:-translate-y-2 hover:border-[#D4A373] hover:bg-white">
+
+        <div class="text-[#D4A373] text-4xl mb-6 transition group-hover:scale-110">
+          ♡
         </div>
-        <h3 class="font-medium text-stone-700">Ana Martínez</h3>
-        <p class="text-teal-600 text-sm">Especialista en masajes</p>
+
+        <h3 class="font-serif text-2xl text-[#1E3A5F] mb-3">
+          Bienestar
+        </h3>
+
+        <div class="w-10 h-[2px] bg-[#D4A373] mx-auto mb-4 transition-all duration-300 group-hover:w-16"></div>
+
+        <p class="text-gray-500 text-lg leading-relaxed">
+          El equilibrio físico y emocional es el centro de cada experiencia.
+        </p>
+
       </div>
-      <div class="bg-white rounded-2xl shadow-md p-6 text-center">
-        <div class="w-20 h-20 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <span class="text-3xl">👨</span>
+
+      <!-- CARD 2 -->
+      <div class="lux-card group p-10 text-center border border-transparent rounded-2xl
+                  transition-all duration-300 ease-out
+                  hover:shadow-xl hover:-translate-y-2 hover:border-[#D4A373] hover:bg-white">
+
+        <div class="text-[#D4A373] text-4xl mb-6 transition group-hover:scale-110">
+          ✓
         </div>
-        <h3 class="font-medium text-stone-700">Carlos Ruiz</h3>
-        <p class="text-teal-600 text-sm">Terapeuta holístico</p>
+
+        <h3 class="font-serif text-2xl text-[#1E3A5F] mb-3">
+          Calidad
+        </h3>
+
+        <div class="w-10 h-[2px] bg-[#D4A373] mx-auto mb-4 transition-all duration-300 group-hover:w-16"></div>
+
+        <p class="text-gray-500 text-lg leading-relaxed">
+          Cada detalle está cuidadosamente diseñado con estándares elevados.
+        </p>
+
       </div>
-      <div class="bg-white rounded-2xl shadow-md p-6 text-center">
-        <div class="w-20 h-20 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <span class="text-3xl">👩</span>
+
+      <!-- CARD 3 -->
+      <div class="lux-card group p-10 text-center border border-transparent rounded-2xl
+                  transition-all duration-300 ease-out
+                  hover:shadow-xl hover:-translate-y-2 hover:border-[#D4A373] hover:bg-white">
+
+        <div class="text-[#D4A373] text-4xl mb-6 transition group-hover:scale-110">
+          ∞
         </div>
-        <h3 class="font-medium text-stone-700">Laura Gómez</h3>
-        <p class="text-teal-600 text-sm">Esteticista certificada</p>
+
+        <h3 class="font-serif text-2xl text-[#1E3A5F] mb-3">
+          Confianza
+        </h3>
+
+        <div class="w-10 h-[2px] bg-[#D4A373] mx-auto mb-4 transition-all duration-300 group-hover:w-16"></div>
+
+        <p class="text-gray-500 text-lg leading-relaxed">
+          Un espacio íntimo, seguro y completamente profesional.
+        </p>
+
       </div>
+
     </div>
 
-    <!-- CTA -->
-    <div class="text-center">
-      <a routerLink="/agendar"
-        class="bg-teal-600 hover:bg-teal-700 text-white px-10 py-4 rounded-full text-lg transition-colors duration-300">
-        Agenda tu cita hoy
-      </a>
-    </div>
   </div>
 
 </section>

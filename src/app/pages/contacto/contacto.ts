@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-contacto',
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './contacto.html',
   styleUrl: './contacto.css'
 })
@@ -25,7 +26,6 @@ export class Contacto {
       return;
     }
 
-
     Swal.fire({
       icon: 'success',
       title: '¡Mensaje enviado!',
@@ -37,4 +37,20 @@ export class Contacto {
     this.email = '';
     this.mensaje = '';
   }
+
+calificacionSeleccionada = 0;
+calificaciones: number[] = [5, 4, 5]; // inicial
+
+calificar(n: number) {
+  this.calificacionSeleccionada = n;
+  this.calificaciones.push(n);
 }
+
+get promedio(): number {
+  const total = this.calificaciones.reduce((a, b) => a + b, 0);
+  return this.calificaciones.length ? total / this.calificaciones.length : 0;
+}
+
+mostrarMapa = false;
+}
+

@@ -1,0 +1,30 @@
+.input-lux {
+  width: 100%;
+  border-bottom: 1px solid #E5E7EB;
+  padding: 12px 4px;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+.input-lux:focus {
+  border-color: #D4A373;
+}
+
+.btn-lux {
+  border: 1px solid #D4A373;
+  color: #1E3A5F;
+  padding: 14px;
+  letter-spacing: 0.2em;
+  font-family: 'Lora', serif;
+  font-size: 13px;
+  background: transparent;
+  transition: all 0.4s ease;
+}
+
+.btn-lux:hover {
+  background-color: #D4A373;
+  color: white;
+}
