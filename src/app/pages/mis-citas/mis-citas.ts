@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Citas } from '../../services/citas';
 import { Cita } from '../../interfaces/cita';
@@ -16,6 +16,8 @@ export class MisCitas implements OnInit {
   private authService = inject(Auth);
   router = inject(Router);
 
+  private cd = inject(ChangeDetectorRef);
+
   citas: Cita[] = [];
   cargando = true;
 
@@ -31,12 +33,23 @@ export class MisCitas implements OnInit {
 
   ngOnInit() {
     const email = this.authService.usuario()?.email || '';
+
+    console.log("EMAIL:", email);
+
     this.citasService.getCitasPorUsuario(email).subscribe({
-      next: (data) => {
-        this.citas = data;
+      next: (res: any) => {
+
+        console.log("CITAS BACK:", res.data);
+        
+        this.citas = res.data;
         this.cargando = false;
+
+        this.cd.detectChanges();
       },
-      error: () => {
+      error: (err) => {
+        
+        console.log("ERROR CITAS:", err)
+
         this.cargando = false;
       }
     });
@@ -59,6 +72,7 @@ export class MisCitas implements OnInit {
             this.citas = this.citas.map(c =>
               c.id === id ? { ...c, estado: 'cancelada' } : c
             );
+            this.cd.detectChanges();
             Swal.fire({
               icon: 'success',
               title: 'Cita cancelada',
