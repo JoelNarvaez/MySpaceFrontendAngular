@@ -136,11 +136,12 @@
             </span>
           </button>
 
-          <div *ngIf="faqAbierto === 0"
-               class="text-gray-600 text-sm mt-2 leading-relaxed max-w-3xl">
-            Recomendamos reservar con anticipación para asegurar disponibilidad,
-            especialmente en fines de semana o temporadas altas.
-          </div>
+          @if (faqAbierto === 0) {
+            <div class="text-gray-600 text-sm mt-2 leading-relaxed max-w-3xl">
+              Recomendamos reservar con anticipación para asegurar disponibilidad,
+              especialmente en fines de semana o temporadas altas.
+            </div>
+          }
         </div>
 
         <!-- ITEM -->
@@ -158,11 +159,12 @@
             </span>
           </button>
 
-          <div *ngIf="faqAbierto === 1"
-               class="text-gray-600 text-sm mt-2 leading-relaxed max-w-3xl">
-            Solo necesitas venir cómodo. Nosotros te proporcionamos todo lo necesario
-            para tu experiencia.
-          </div>
+          @if (faqAbierto === 1) {
+            <div class="text-gray-600 text-sm mt-2 leading-relaxed max-w-3xl">
+              Solo necesitas venir cómodo. Nosotros te proporcionamos todo lo necesario
+              para tu experiencia.
+            </div>
+          }
         </div>
 
         <!-- ITEM -->
@@ -180,10 +182,11 @@
             </span>
           </button>
 
-          <div *ngIf="faqAbierto === 2"
-               class="text-gray-600 text-sm mt-2 leading-relaxed max-w-3xl">
-            Sí, puedes hacerlo con al menos 24 horas de anticipación sin costo adicional.
-          </div>
+          @if (faqAbierto === 2) {
+            <div class="text-gray-600 text-sm mt-2 leading-relaxed max-w-3xl">
+              Sí, puedes hacerlo con al menos 24 horas de anticipación sin costo adicional.
+            </div>
+          }
         </div>
 
         <!-- ITEM -->
@@ -201,10 +204,11 @@
             </span>
           </button>
 
-          <div *ngIf="faqAbierto === 3"
-               class="text-gray-600 text-sm mt-2 leading-relaxed max-w-3xl">
-            Dependiendo del servicio, las sesiones suelen durar entre 60 y 90 minutos.
-          </div>
+          @if (faqAbierto === 3) {
+            <div class="text-gray-600 text-sm mt-2 leading-relaxed max-w-3xl">
+              Dependiendo del servicio, las sesiones suelen durar entre 60 y 90 minutos.
+            </div>
+          }
         </div>
 
         <!-- ITEM -->
@@ -222,10 +226,11 @@
             </span>
           </button>
 
-          <div *ngIf="faqAbierto === 4"
-               class="text-gray-600 text-sm mt-2 leading-relaxed max-w-3xl">
-            Sí, aceptamos efectivo, tarjetas y transferencias.
-          </div>
+          @if (faqAbierto === 4) {
+            <div class="text-gray-600 text-sm mt-2 leading-relaxed max-w-3xl">
+              Sí, aceptamos efectivo, tarjetas y transferencias.
+            </div>
+          }
         </div>
 
       </div>
