@@ -21,6 +21,8 @@
           <div
             class="service-hero-media"
             [style.background-image]="obtenerImagenFondo()"
+            [style.background-position]="obtenerPosicionFondo()"
+            [style.background-size]="'cover'"
             [class.service-hero-media--fallback]="!servicio()?.imagen_url"
           >
             <div class="service-hero-media__overlay"></div>

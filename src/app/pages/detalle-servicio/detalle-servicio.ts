@@ -59,6 +59,27 @@ export class DetalleServicio implements OnInit {
   router = inject(Router);
   private serviciosService = inject(Servicios);
 
+
+  imagenes: Record<number, string> = {
+    1: 'aromaterapia2.jpg',
+    2: 'masajeRelajante.jpg',
+    3: 'masajeDescontructurante.jpg',
+    4: 'piedras.jpg',
+    5: 'pinda.jpg',
+    6: 'drenaje.jpeg',
+    7: 'tratamiento.jpg'
+  };
+
+  //Posición para las imagenes
+  posiciones: Record<number, string> = {
+    1: 'center center',    // aromaterapia
+    2: 'center top',       // masaje relajante
+    3: 'center center',    // masaje descontracturante
+    4: 'center center',    // piedras
+    5: 'center top',       // pinda
+    6: 'center center',    // drenaje
+    7: 'center center'     // tratamiento
+  };
   servicio = signal<Servicio | undefined>(undefined);
   panelActivo = signal<PanelDetalle>('incluye');
 
@@ -89,8 +110,15 @@ export class DetalleServicio implements OnInit {
   }
 
   obtenerImagenFondo(): string {
-    const imagen = this.servicio()?.imagen_url?.trim();
+    const id = this.servicio()?.id || 0;
+    const imagen = this.imagenes[id];
+    const posicion = this.posiciones[id] || 'center center';
     return imagen ? `url('${imagen}')` : '';
+  }
+
+  obtenerPosicionFondo(): string {
+    const id = this.servicio()?.id || 0;
+    return this.posiciones[id] || 'center center';
   }
 
   // Como todas duran 60 min, simplificamos la lógica
