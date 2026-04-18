@@ -40,7 +40,7 @@ export class Login {
       next: (usuario) => {
         this.cargando = false;
         const returnUrl = this.route.snapshot.queryParams['returnUrl'];
-        const destino = returnUrl || (usuario.rol === 'admin' ? '/admin/calendario' : '/agendar');
+        const destino = returnUrl || (usuario.rol === 'admin' ? '/admin/calendario' : '/');
         const nombre = usuario.nombre || usuario.email || 'Usuario';
 
         Swal.fire({

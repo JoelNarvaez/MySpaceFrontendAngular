@@ -15,6 +15,24 @@ export class Contacto {
   email = '';
   mensaje = '';
 
+  ngOnInit() {
+    const emailUsuario = localStorage.getItem('usuario') 
+      ? JSON.parse(localStorage.getItem('usuario')!).email 
+      : null;
+
+    if (emailUsuario) {
+      const calificacionGuardada = localStorage.getItem(`calificacion_${emailUsuario}`);
+      if (calificacionGuardada) { //Verificar si ya hay una calificación de la página
+        this.yaCalifico = true;
+        this.calificacionSeleccionada = Number(calificacionGuardada);
+      }
+    } else {  
+      // Si no hay sesión, resetea las estrellas
+      this.yaCalifico = false;
+      this.calificacionSeleccionada = 0;
+    }
+}
+
   enviarMensaje() {
     if (!this.nombre || !this.email || !this.mensaje) {
       Swal.fire({
@@ -38,12 +56,47 @@ export class Contacto {
     this.mensaje = '';
   }
 
+// Escala de calificaciones
+yaCalifico = false;
 calificacionSeleccionada = 0;
 calificaciones: number[] = [5, 4, 5]; // inicial
+estrellaHover = 0;
 
-calificar(n: number) {
+/*calificar(n: number) {
   this.calificacionSeleccionada = n;
   this.calificaciones.push(n);
+}*/
+
+
+
+calificar(n: number) {
+  if (this.yaCalifico) return;
+
+  const emailUsuario = localStorage.getItem('usuario')
+    ? JSON.parse(localStorage.getItem('usuario')!).email
+    : null;
+
+  if (!emailUsuario) {
+    Swal.fire({
+      icon: 'info',
+      title: 'Inicia sesión',
+      text: 'Debes iniciar sesión para calificar',
+      confirmButtonColor: '#0d9488'
+    });
+    return;
+  }
+
+  this.calificacionSeleccionada = n;
+  this.calificaciones.push(n);
+  this.yaCalifico = true;
+  localStorage.setItem(`calificacion_${emailUsuario}`, n.toString());
+
+  Swal.fire({
+    icon: 'success',
+    title: '¡Gracias por tu calificación!',
+    showConfirmButton: false,
+    timer: 1500
+  });
 }
 
 get promedio(): number {

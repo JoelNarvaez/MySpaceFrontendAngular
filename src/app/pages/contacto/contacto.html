@@ -163,20 +163,26 @@
       @for (i of [1,2,3,4,5]; track i) {
 
         <!-- NgStyle -->
-        <svg
-          (click)="calificar(i)"
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-14 h-14 cursor-pointer transition-all duration-300 ease-out hover:scale-125"
-          [ngStyle]="{
-            color: i <= calificacionSeleccionada ? '#D4A373' : '#D1D5DB',
-            transform: i <= calificacionSeleccionada ? 'scale(1.2)' : 'scale(1)',
-            filter: i <= calificacionSeleccionada 
-              ? 'drop-shadow(0 0 10px rgba(212,163,115,0.7))' 
-              : 'none'
-          }"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-        >
+      <svg
+        (click)="calificar(i)"
+        (mouseenter)="!yaCalifico && (estrellaHover = i)"
+        (mouseleave)="!yaCalifico && (estrellaHover = 0)"
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-14 h-14 transition-all duration-300 ease-out"
+        [class.cursor-pointer]="!yaCalifico"
+        [ngStyle]="{
+          color: i <= calificacionSeleccionada || i <= estrellaHover ? '#D4A373' : '#D1D5DB',
+          transform: i <= estrellaHover && !yaCalifico ? 'scale(1.2)' : i <= calificacionSeleccionada ? 'scale(1.2)' : 'scale(1)',
+          filter: i <= calificacionSeleccionada
+            ? 'drop-shadow(0 0 10px rgba(212,163,115,0.7))'
+            : i <= estrellaHover && !yaCalifico
+              ? 'drop-shadow(0 0 8px rgba(212,163,115,0.5))'
+              : 'none',
+          pointerEvents: yaCalifico ? 'none' : 'auto'
+        }"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.955a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.955c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.955a1 1 0 00-.364-1.118L2.98 9.382c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.955z"/>
         </svg>
 
