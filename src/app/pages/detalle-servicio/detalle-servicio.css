@@ -120,9 +120,13 @@
 .service-title {
   margin-top: 0.8rem;
   color: #fff;
-  font-size: clamp(2.2rem, 4vw, 4.2rem);
-  line-height: 0.98;
+  font-size: clamp(1.6rem, 1.8rem, 4.2rem); 
+  line-height: 1.1;  /* Aumentamos un poco de 0.98 para que no se encimen los cortes porque pipipi se andaba cortando la*/ 
   text-transform: uppercase;
+  word-wrap: break-word;      /* Fuerza el salto si la palabra es muy larga */
+  overflow-wrap: break-word;
+  hyphens: auto;              /* Añade guiones automáticamente si el idioma está configurado */
+  max-width: 100%;            /* No permite que el texto sea más ancho que la tarjeta */
 }
 
 .service-summary {
@@ -334,6 +338,21 @@
 
 .primary-cta--desktop {
   display: none;
+}
+
+/* Estilo para la descripcion del servicio */
+.service-description-block {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.service-summary-highlight {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #4b5563;
+  font-style: italic;
+  position: relative;
+  padding-left: 1.2rem;
+  border-left: 3px solid #d4a373; 
 }
 
 @media (min-width: 768px) {

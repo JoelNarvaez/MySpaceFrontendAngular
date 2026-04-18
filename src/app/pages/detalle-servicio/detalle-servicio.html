@@ -1,7 +1,7 @@
-<section class="service-detail-shell min-h-screen px-5 py-14 md:px-8 md:py-16">
+<section class="service-detail-shell min-h-screen px-5 py-14 md:px-10 lg:px-16 md:py-16">
   <div class="mx-auto max-w-6xl">
     @if (!servicio()) {
-      <div class="service-loading flex min-h-[24rem] items-center justify-center">
+      <div class="service-loading flex min-h-96 items-center justify-center">
         <div class="text-center">
           <div class="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-[#D4A373]"></div>
           <p class="logo-font mt-5 text-lg uppercase tracking-[0.18em] text-[#1E3A5F]">Preparando tu experiencia</p>
@@ -17,7 +17,7 @@
       </button>
 
       <div class="service-detail-grid">
-        <article class="service-hero-card">
+        <article class="service-hero-card flex flex-col h-full">
           <div
             class="service-hero-media"
             [style.background-image]="obtenerImagenFondo()"
@@ -33,11 +33,17 @@
             <div class="service-hero-copy">
               <p class="service-eyebrow">Experiencia destacada</p>
               <h1 class="logo-font service-title">{{ servicio()?.nombre }}</h1>
-              <p class="service-summary">{{ resumen() }}</p>
-            </div>
+              </div>
           </div>
 
-          <div class="service-indicator-grid">
+          <div class="service-description-block p-6 md:p-8 bg-white flex-grow">
+            <p class="service-section-label mb-3">Sobre esta experiencia</p>
+            <p class="service-summary-highlight">
+              {{ resumen() }}
+            </p>
+          </div>
+
+          <div class="service-indicator-grid mt-auto">
             @for (indicador of obtenerIndicadores(); track indicador.etiqueta) {
               <div class="service-indicator">
                 <span class="service-indicator__label">{{ indicador.etiqueta }}</span>

@@ -7,6 +7,46 @@ import { PrecioMxnPipe } from '../../pipes/precio-mxn-pipe';
 
 type PanelDetalle = 'incluye' | 'visita' | 'ideal';
 
+// para tener como un servicio mas personalizado puse una constante que marca una estrucura que se utiliza para 
+// declarar un objeto el cual utilizo para despues desplegar la informacion 
+const DETALLES_SERVICIOS: Record<number, { incluye: string[], ideal: string[], visita: string }> = {
+  1: {
+    incluye: ['Uso de aceites esenciales de grado terapéutico', 'Difusión ambiental personalizada', 'Masaje rítmico en todo el cuerpo'],
+    ideal: ['Reducir niveles de estrés y ansiedad', 'Personas que buscan una experiencia sensorial', 'Mejorar el estado de ánimo'],
+    visita: 'Iniciaremos con una breve prueba de olfato para que elijas el aceite esencial que más te agrade.'
+  },
+  2: {
+    incluye: ['Técnica manual suave y rítmica', 'Música ambiental relajante', 'Aceites minerales hidratantes'],
+    ideal: ['Desconexión total del día a día', 'Aliviar fatiga mental', 'Relajación muscular ligera'],
+    visita: 'Es una sesión fluida diseñada para calmar el sistema nervioso sin presiones fuertes.'
+  },
+  3: {
+    incluye: ['Presión profunda en zonas de tensión', 'Uso de bálsamos caloríficos', 'Estiramientos asistidos'],
+    ideal: ['Dolor muscular por mala postura', 'Nudos de tensión (contracturas)', 'Recuperación tras actividad física'],
+    visita: 'Nos enfocaremos en liberar los puntos gatillo y la rigidez en espalda, cuello y hombros.'
+  },
+  4: {
+    incluye: ['Piedras volcánicas calientes', 'Aceite de coco orgánico', 'Termoterapia profunda'],
+    ideal: ['Mejorar la circulación sanguínea', 'Aliviar dolores articulares', 'Combatir el insomnio y fatiga crónica'],
+    visita: 'El calor de las piedras ayudará a relajar los músculos antes de iniciar las maniobras manuales.'
+  },
+  5: {
+    incluye: ['Saquitos de hierbas calientes (Pindas)', 'Aromas herbales naturales', 'Presiones circulares'],
+    ideal: ['Desintoxicación del cuerpo', 'Relajación profunda de la piel', 'Equilibrio energético'],
+    visita: 'Disfrutarás de un ritual tailandés que combina calor, presión y herbolaria.'
+  },
+  6: {
+    incluye: ['Maniobras de bombeo rítmico', 'Sin uso de aceites pesados', 'Enfoque en sistema linfático'],
+    ideal: ['Reducir retención de líquidos', 'Post-operatorios (con alta médica)', 'Piernas cansadas o pesadez'],
+    visita: 'Es un masaje muy sutil y suave que ayuda a tu cuerpo a eliminar toxinas naturalmente.'
+  },
+  7: {
+    incluye: ['Técnicas de modelado corporal', 'Activación de la circulación', 'Tratamiento localizado'],
+    ideal: ['Mejorar la apariencia de la piel', 'Complemento de hábitos saludables', 'Drenaje y reafirmación'],
+    visita: 'Evaluaremos las zonas a trabajar para aplicar la técnica de remodelado más efectiva.'
+  }
+};
+
 @Component({
   selector: 'app-detalle-servicio',
   standalone: true,
@@ -22,14 +62,9 @@ export class DetalleServicio implements OnInit {
   servicio = signal<Servicio | undefined>(undefined);
   panelActivo = signal<PanelDetalle>('incluye');
 
+  // Resumen simplificado
   resumen = computed(() => {
-    const descripcion = this.servicio()?.descripcion?.trim();
-    if (!descripcion) {
-      return 'Una experiencia diseñada para ayudarte a desconectar, recuperar equilibrio y disfrutar un momento de bienestar.';
-    }
-
-    const [primerBloque] = descripcion.split(/(?<=[.!?])\s+/);
-    return primerBloque || descripcion;
+    return this.servicio()?.descripcion || 'Una experiencia diseñada para tu bienestar.';
   });
 
   detalleActivo = computed(() => this.obtenerPanelContenido(this.panelActivo()));
@@ -58,117 +93,54 @@ export class DetalleServicio implements OnInit {
     return imagen ? `url('${imagen}')` : '';
   }
 
+  // Como todas duran 60 min, simplificamos la lógica
   obtenerEtiquetaDuracion(): string {
-    const minutos = this.servicio()?.duracion_min ?? 0;
-
-    if (minutos <= 45) {
-      return 'Ritual express';
-    }
-
-    if (minutos <= 75) {
-      return 'Sesión equilibrada';
-    }
-
-    return 'Experiencia profunda';
-  }
-
-  obtenerBeneficios(): string[] {
-    const descripcion = this.servicio()?.descripcion?.trim();
-    const nombre = this.servicio()?.nombre || 'tu experiencia';
-
-    if (descripcion) {
-      const segmentos = descripcion
-        .split(/[.!?]/)
-        .map((item) => item.trim())
-        .filter(Boolean)
-        .slice(0, 3);
-
-      if (segmentos.length) {
-        return segmentos;
-      }
-    }
-
-    return [
-      `Atención personalizada durante todo el proceso de ${nombre.toLowerCase()}.`,
-      'Un espacio pensado para que te relajes desde el primer minuto.',
-      'Cierre con recomendaciones para prolongar el bienestar después de la sesión.'
-    ];
+    return 'Sesión equilibrada';
   }
 
   obtenerMomentos(): Array<{ titulo: string; detalle: string; tiempo: string }> {
-    const duracion = this.servicio()?.duracion_min ?? 60;
-    const bienvenida = Math.max(10, Math.round(duracion * 0.15));
-    const experiencia = Math.max(25, Math.round(duracion * 0.65));
-    const cierre = Math.max(10, duracion - bienvenida - experiencia);
-
     return [
-      {
-        titulo: 'Bienvenida',
-        detalle: 'Recepción, contexto rápido de tu visita y preparación del espacio.',
-        tiempo: `${bienvenida} min`
-      },
-      {
-        titulo: 'Experiencia',
-        detalle: 'El servicio principal se desarrolla con ritmo continuo y atención personalizada.',
-        tiempo: `${experiencia} min`
-      },
-      {
-        titulo: 'Cierre',
-        detalle: 'Salida suave, recomendaciones y seguimiento para que aproveches mejor tu sesión.',
-        tiempo: `${cierre} min`
-      }
+      { titulo: 'Bienvenida', detalle: 'Recepción y preparación del espacio.', tiempo: '10 min' },
+      { titulo: 'Experiencia', detalle: 'Desarrollo de la técnica principal del masaje.', tiempo: '40 min' },
+      { titulo: 'Cierre', detalle: 'Salida suave y recomendaciones de cuidado.', tiempo: '10 min' }
     ];
   }
 
   obtenerIndicadores(): Array<{ etiqueta: string; valor: string }> {
-    const servicio = this.servicio();
-
     return [
-      {
-        etiqueta: 'Duración',
-        valor: `${servicio?.duracion_min ?? 0} min`
-      },
-      {
-        etiqueta: 'Modalidad',
-        valor: 'Atención personalizada'
-      },
-      {
-        etiqueta: 'Reserva',
-        valor: 'Confirmación rápida'
-      }
+      { etiqueta: 'Duración', valor: '60 min' },
+      { etiqueta: 'Modalidad', valor: 'Presencial' },
+      { etiqueta: 'Atención', valor: 'Personalizada' }
     ];
   }
 
   private obtenerPanelContenido(panel: PanelDetalle): { titulo: string; descripcion: string; puntos: string[] } {
-    const nombre = this.servicio()?.nombre || 'este servicio';
-    const beneficios = this.obtenerBeneficios();
+    const id = this.servicio()?.id || 0;
+    const info = DETALLES_SERVICIOS[id];
+    const nombre = this.servicio()?.nombre || 'el servicio';
 
     switch (panel) {
       case 'visita':
         return {
           titulo: 'Cómo será tu visita',
-          descripcion: 'La experiencia está organizada para que entiendas el ritmo de la sesión antes de reservar.',
+          descripcion: info?.visita || 'Una sesión organizada para tu máximo confort.',
           puntos: [
-            'Llegas, te recibimos y ajustamos detalles básicos de comodidad.',
-            `La sesión de ${nombre.toLowerCase()} se desarrolla sin interrupciones ni pasos confusos.`,
-            'Al final recibes recomendaciones breves para aprovechar mejor el resultado.'
+            'Llegada y ajuste de detalles de comodidad.',
+            `Sesión continua de ${nombre.toLowerCase()}.`,
+            'Hidratación y consejos post-masaje.'
           ]
         };
       case 'ideal':
         return {
           titulo: 'Ideal para ti si buscas',
-          descripcion: 'Este bloque te ayuda a decidir rápido si este servicio sí encaja con lo que necesitas hoy.',
-          puntos: [
-            'Desconectar tensión acumulada y darte un espacio real de pausa.',
-            'Una opción premium pero fácil de entender y reservar.',
-            beneficios[0] || 'Una experiencia enfocada en bienestar y comodidad.'
-          ]
+          descripcion: 'Este masaje es la opción perfecta si tus objetivos son:',
+          puntos: info?.ideal || ['Pausa en tu rutina', 'Bienestar integral']
         };
       default:
         return {
           titulo: 'Lo que incluye',
-          descripcion: 'Resumen claro de lo que obtienes al reservar, sin texto de sobra.',
-          puntos: beneficios
+          descripcion: 'Detalles de lo que recibirás al reservar:',
+          puntos: info?.incluye || ['Atención profesional', 'Ambiente privado']
         };
     }
   }
