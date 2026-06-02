@@ -14,6 +14,7 @@ import { Servicio } from '../../interfaces/servicio';
 import { Auth } from '../../services/auth';
 import { Citas } from '../../services/citas';
 import { Servicios } from '../../services/servicios';
+import { Bloqueos } from '../../services/bloqueos';
 
 export function fechaFuturaValidator(control: AbstractControl): ValidationErrors | null {
   if (!control.value) return null;
@@ -28,6 +29,7 @@ interface DiaCalendario {
   fecha: Date | null;
   esHoy: boolean;
   esPasado: boolean;
+  esBloqueado: boolean;
 }
 
 @Component({
@@ -42,8 +44,13 @@ export class Agendar implements OnInit {
   private fb = inject(FormBuilder);
   private serviciosService = inject(Servicios);
   private citasService = inject(Citas);
+  private bloqueosService = inject(Bloqueos);
   private authService = inject(Auth);
   private cd = inject(ChangeDetectorRef);
+
+  // Bloqueos cargados del backend
+  private diasSemanaBloquedos: number[] = [];   // 0=Dom, 1=Lun...
+  private fechasEspecificasBloquedas: string[] = []; // 'YYYY-MM-DD'
 
   servicios: Servicio[] = [];
   horarios: Horario[] = [];
@@ -237,7 +244,29 @@ export class Agendar implements OnInit {
   }
 
   ngOnInit() {
-    this.generarCalendario();
+    // Primero cargar bloqueos para que el calendario los refleje
+    this.bloqueosService.getBloqueoPublico().subscribe({
+      next: (bloqueos) => {
+        this.diasSemanaBloquedos = bloqueos
+          .filter(b => b.dia_semana !== null && b.dia_semana !== undefined)
+          .map(b => b.dia_semana as number);
+
+        this.fechasEspecificasBloquedas = bloqueos
+          .filter(b => b.fecha)
+          .map(b => {
+            // MySQL puede devolver la fecha como Date object; normalizamos a YYYY-MM-DD
+            const f = b.fecha as string;
+            return f.substring(0, 10);
+          });
+
+        this.generarCalendario();
+        this.cd.detectChanges();
+      },
+      error: () => {
+        // Si falla la carga de bloqueos, el calendario igual funciona (sin restricciones)
+        this.generarCalendario();
+      }
+    });
 
     this.serviciosService.getServicios().subscribe((data) => {
       this.servicios = data;
@@ -273,17 +302,26 @@ export class Agendar implements OnInit {
     this.diasCalendario = [];
 
     for (let indice = 0; indice < primerDia; indice++) {
-      this.diasCalendario.push({ dia: null, fecha: null, esHoy: false, esPasado: true });
+      this.diasCalendario.push({ dia: null, fecha: null, esHoy: false, esPasado: true, esBloqueado: false });
     }
 
     for (let dia = 1; dia <= diasEnMes; dia++) {
       const fecha = new Date(year, month, dia);
       fecha.setHours(0, 0, 0, 0);
+
+      // Verificar si el día está bloqueado
+      const diaSemana = fecha.getDay(); // 0=Dom, 1=Lun...
+      const fechaStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+      const esBloqueado =
+        this.diasSemanaBloquedos.includes(diaSemana) ||
+        this.fechasEspecificasBloquedas.includes(fechaStr);
+
       this.diasCalendario.push({
         dia,
         fecha,
         esHoy: fecha.getTime() === hoy.getTime(),
-        esPasado: fecha.getTime() < hoy.getTime()
+        esPasado: fecha.getTime() < hoy.getTime(),
+        esBloqueado
       });
     }
   }
@@ -305,7 +343,7 @@ export class Agendar implements OnInit {
   }
 
   seleccionarDia(celda: DiaCalendario) {
-    if (!celda.fecha || celda.esPasado) return;
+    if (!celda.fecha || celda.esPasado || celda.esBloqueado) return;
     if (!this.id_servicio?.value) {
       Swal.fire({
         icon: 'info',

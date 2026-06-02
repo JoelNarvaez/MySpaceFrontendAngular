@@ -48,8 +48,10 @@ export class MisCitas implements OnInit {
     const email = this.authService.usuario()?.email || '';
 
     this.citasService.getCitasPorUsuario(email).subscribe({
-      next: (respuesta: any) => {
-        this.citas = respuesta.data || [];
+      next: (citas: Cita[]) => {
+        // getCitasPorUsuario ya hace map(res => res.data) en el servicio,
+        // así que aquí llega directamente el array de citas
+        this.citas = citas ?? [];
         this.cargando = false;
         this.cd.detectChanges();
       },

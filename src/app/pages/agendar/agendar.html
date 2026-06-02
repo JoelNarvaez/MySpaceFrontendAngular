@@ -162,13 +162,15 @@
                         <button
                           type="button"
                           (click)="seleccionarDia(celda)"
-                          [disabled]="celda.esPasado"
+                          [disabled]="celda.esPasado || celda.esBloqueado"
                           class="calendar-day"
                           [ngClass]="{
                             'calendar-day--today': celda.esHoy && !esDiaSeleccionado(celda),
                             'calendar-day--selected': esDiaSeleccionado(celda),
-                            'calendar-day--disabled': celda.esPasado
-                          }">
+                            'calendar-day--disabled': celda.esPasado,
+                            'calendar-day--blocked': celda.esBloqueado
+                          }"
+                          [title]="celda.esBloqueado ? 'Día no disponible' : ''">
                           {{ celda.dia }}
                         </button>
                       }

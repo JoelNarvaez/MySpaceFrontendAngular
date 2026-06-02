@@ -1,40 +1,92 @@
-<section class="min-h-screen bg-stone-50 py-16 px-8">
-  <div class="max-w-5xl mx-auto">
+<section class="admin-shell">
+  <div style="max-width: 62rem; margin: 0 auto;">
 
-    <h1 class="text-4xl text-center text-stone-700 font-light mb-2 tracking-widest">GESTIÓN DE BLOQUEOS</h1>
-    <p class="text-center text-stone-400 mb-10">Administra los días y horarios no disponibles</p>
+    <!-- Tabs de navegación -->
+    <div class="admin-tabs">
+      <div class="admin-tabs__inner">
+        <a routerLink="/admin/calendario" class="admin-tab">Citas</a>
+        <a routerLink="/admin/bloqueos"   class="admin-tab admin-tab--active">Bloqueos</a>
+      </div>
+    </div>
 
-    <div class="grid grid-cols-2 gap-8">
+    <!-- Encabezado -->
+    <p class="admin-page-title">Gestión de Bloqueos</p>
+    <p class="admin-page-sub">Administra los días y horarios no disponibles para citas</p>
 
-      <!-- Formulario nuevo bloqueo -->
-      <div class="bg-white rounded-2xl shadow-md p-8">
-        <h2 class="text-xl text-stone-700 font-medium mb-6">Nuevo bloqueo</h2>
+    <!-- ═══ 1. Bloqueo rápido ═══ -->
+    <div class="admin-card">
+      <p class="card-label">Herramienta rápida</p>
+      <p class="card-title">Bloqueo por día de semana</p>
+      <p class="card-desc">Un clic bloquea ese día de la semana de forma permanente para todos los meses.</p>
+      <div class="quick-btns">
+        @for (dia of diasSemana; track dia.valor) {
+          <button class="quick-btn" (click)="bloqueoRapidoDia(dia.valor, dia.nombre)">
+            {{ dia.nombre }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- ═══ 2. Festivos sugeridos ═══ -->
+    <div class="admin-card">
+      <p class="card-label">Lista inteligente</p>
+      <p class="card-title">Días festivos oficiales 2026–2027</p>
+      <p class="card-desc">Selecciona los festivos que deseas bloquear y confírmalos con un solo clic.</p>
+      <div class="festivos-grid">
+        @for (festivo of festivos; track festivo.fecha) {
+          <label class="festivo-label">
+            <input type="checkbox"
+              [checked]="esFestivoSeleccionado(festivo.fecha)"
+              (change)="toggleFestivo(festivo.fecha)"/>
+            <div>
+              <span class="festivo-name">{{ festivo.nombre }}</span>
+              <span class="festivo-date">{{ festivo.fecha }}</span>
+            </div>
+          </label>
+        }
+      </div>
+      <button class="btn-block"
+        (click)="bloquearFestivosSeleccionados()"
+        [disabled]="festivosSeleccionados().length === 0 || bloqueandoFestivos()"
+        [class]="festivosSeleccionados().length === 0 ? 'btn-block btn-block--disabled' : 'btn-block btn-block--active'">
+        @if (bloqueandoFestivos()) {
+          Bloqueando...
+        } @else if (festivosSeleccionados().length === 0) {
+          Selecciona al menos un festivo
+        } @else {
+          Bloquear {{ festivosSeleccionados().length }} día(s) seleccionado(s)
+        }
+      </button>
+    </div>
+
+    <!-- ═══ 3 + 4. Formulario personalizado + Lista activa ═══ -->
+    <div class="admin-two-col">
+
+      <!-- Formulario -->
+      <div class="admin-card">
+        <p class="card-label">Bloqueo a medida</p>
+        <p class="card-title">Bloqueo personalizado</p>
+        <p class="card-desc">Fecha específica, día recurrente o franja horaria.</p>
 
         <form [formGroup]="form" (ngSubmit)="guardarBloqueo()">
 
-          <!-- Tipo -->
-          <div class="mb-6">
-            <label class="block text-stone-600 text-sm mb-2">Tipo de bloqueo</label>
-            <select formControlName="tipo"
-              class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500">
+          <div class="form-field">
+            <label class="form-label">Tipo de bloqueo</label>
+            <select formControlName="tipo" class="form-select">
               <option value="dia">Día completo</option>
               <option value="horario">Horario específico</option>
             </select>
           </div>
 
-          <!-- Fecha específica -->
           @if (tipo?.value === 'dia') {
-            <div class="mb-6">
-              <label class="block text-stone-600 text-sm mb-2">Fecha específica (opcional)</label>
-              <input type="date" formControlName="fecha"
-                class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500"/>
+            <div class="form-field">
+              <label class="form-label">Fecha específica <span style="color:#9CA3AF;text-transform:none;font-weight:400;">(opcional)</span></label>
+              <input type="date" formControlName="fecha" class="form-input"/>
             </div>
-
-            <div class="mb-6">
-              <label class="block text-stone-600 text-sm mb-2">O día de la semana (opcional)</label>
-              <select formControlName="dia_semana"
-                class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500">
-                <option [value]="null">Selecciona un día</option>
+            <div class="form-field">
+              <label class="form-label">Día de la semana <span style="color:#9CA3AF;text-transform:none;font-weight:400;">(opcional)</span></label>
+              <select formControlName="dia_semana" class="form-select">
+                <option [value]="null">Selecciona un día...</option>
                 @for (dia of diasSemana; track dia.valor) {
                   <option [value]="dia.valor">{{ dia.nombre }}</option>
                 }
@@ -42,71 +94,60 @@
             </div>
           }
 
-          <!-- Hora específica -->
           @if (tipo?.value === 'horario') {
-            <div class="mb-6 grid grid-cols-2 gap-4">
+            <div class="form-row">
               <div>
-                <label class="block text-stone-600 text-sm mb-2">Hora de inicio</label>
-                <input type="time" formControlName="hora_inicio"
-                  class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500"/>
+                <label class="form-label">Hora inicio</label>
+                <input type="time" formControlName="hora_inicio" class="form-input" style="border-radius:0.8rem;"/>
               </div>
               <div>
-                <label class="block text-stone-600 text-sm mb-2">Hora de fin</label>
-                <input type="time" formControlName="hora_fin"
-                  class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500"/>
+                <label class="form-label">Hora fin</label>
+                <input type="time" formControlName="hora_fin" class="form-input" style="border-radius:0.8rem;"/>
               </div>
             </div>
             @if ((hora_inicio?.invalid && hora_inicio?.touched) || (hora_fin?.invalid && hora_fin?.touched)) {
-              <p class="text-red-400 text-xs mt-1 ml-2">Debes indicar la hora de inicio y fin</p>
+              <p class="form-error">Debes indicar la hora de inicio y fin</p>
             }
           }
 
-          <!-- Motivo -->
-          <div class="mb-6">
-            <label class="block text-stone-600 text-sm mb-2">Motivo</label>
-            <input type="text" formControlName="motivo" placeholder="Ej. Día festivo, mantenimiento..."
-              class="w-full border border-stone-300 rounded-full px-4 py-3 focus:outline-none focus:border-teal-500"/>
+          <div class="form-field">
+            <label class="form-label">Motivo</label>
+            <input type="text" formControlName="motivo"
+              placeholder="Ej. Día festivo, mantenimiento..." class="form-input"/>
             @if (motivo?.invalid && motivo?.touched) {
-              <p class="text-red-400 text-xs mt-1 ml-2">El motivo es obligatorio</p>
+              <p class="form-error">El motivo es obligatorio (mínimo 3 caracteres)</p>
             }
           </div>
 
-          <button type="submit"
-            class="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-full transition-colors duration-300">
-            Guardar bloqueo
-          </button>
-
+          <button type="submit" class="btn-form-submit">Guardar bloqueo</button>
         </form>
       </div>
 
-      <!-- Lista de bloqueos -->
-      <div class="bg-white rounded-2xl shadow-md p-8">
-        <h2 class="text-xl text-stone-700 font-medium mb-6">Bloqueos activos</h2>
+      <!-- Lista de bloqueos activos -->
+      <div class="admin-card">
+        <p class="card-label">Activos actualmente</p>
+        <p class="card-title">Bloqueos registrados</p>
 
-        @if (bloqueos.length === 0) {
-          <p class="text-center text-stone-400 py-8">No hay bloqueos activos</p>
+        @if (bloqueos().length === 0) {
+          <p class="empty-list">No hay bloqueos activos</p>
         } @else {
-          <div class="flex flex-col gap-3">
-            @for (bloqueo of bloqueos; track bloqueo.id) {
-              <div class="flex items-center justify-between p-4 bg-stone-50 rounded-xl">
-                <div>
-                  <p class="text-stone-700 font-medium text-sm">
+          <div class="bloqueos-scroll">
+            @for (bloqueo of bloqueos(); track bloqueo.id) {
+              <div class="bloqueo-item">
+                <div class="bloqueo-item__info">
+                  <p class="bloqueo-item__title">
                     @if (bloqueo.tipo === 'dia') {
-                      📅
-                      @if (bloqueo.fecha) { {{ bloqueo.fecha }} }
+                      @if (bloqueo.fecha) { {{ formatoFecha(bloqueo.fecha) }} }
                       @if (bloqueo.dia_semana !== null && bloqueo.dia_semana !== undefined) {
-                        {{ diasSemana[bloqueo.dia_semana].nombre }}s
+                        Todos los {{ nombreDia(bloqueo.dia_semana) }}
                       }
                     } @else {
-                      🕐 {{ bloqueo.hora_inicio }} - {{ bloqueo.hora_fin }}
+                      {{ bloqueo.hora_inicio }} – {{ bloqueo.hora_fin }}
                     }
                   </p>
-                  <p class="text-stone-400 text-xs mt-1">{{ bloqueo.motivo }}</p>
+                  <p class="bloqueo-item__motivo">{{ bloqueo.motivo }}</p>
                 </div>
-                <button (click)="eliminarBloqueo(bloqueo.id)"
-                  class="text-red-400 hover:text-red-600 transition-colors text-sm">
-                  Eliminar
-                </button>
+                <button class="btn-delete" (click)="eliminarBloqueo(bloqueo.id)">Eliminar</button>
               </div>
             }
           </div>

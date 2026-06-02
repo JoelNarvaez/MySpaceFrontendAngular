@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Cita } from '../interfaces/cita';
 import { Horario } from '../interfaces/horario';
 import { environment } from '../../environments/environment';
@@ -22,7 +23,8 @@ export class Citas {
   }
 
   getCitasPorUsuario(email: string): Observable<Cita[]> {
-    return this.http.get<Cita[]>(`${this.apiUrl}/citas/usuario/${email}`);
+    return this.http.get<{ success: boolean; data: Cita[] }>(`${this.apiUrl}/citas/usuario/${email}`)
+      .pipe(map(res => res.data));
   }
 
   cancelarCita(id: number, motivoCancelacion: string): Observable<any> {
@@ -32,6 +34,7 @@ export class Citas {
   }
 
   getCitasAdmin(): Observable<Cita[]> {
-    return this.http.get<Cita[]>(`${this.apiUrl}/citas`);
+    return this.http.get<{ success: boolean; data: Cita[] }>(`${this.apiUrl}/citas`)
+      .pipe(map(res => res.data));
   }
 }

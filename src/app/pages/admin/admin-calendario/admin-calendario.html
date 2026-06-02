@@ -1,54 +1,115 @@
-<section class="min-h-screen bg-stone-50 py-16 px-8">
-  <div class="max-w-5xl mx-auto">
+<section class="admin-shell">
+  <div style="max-width: 72rem; margin: 0 auto;">
 
-    <h1 class="text-4xl text-center text-stone-700 font-light mb-2 tracking-widest">PANEL ADMIN</h1>
-    <p class="text-center text-stone-400 mb-10">Gestión de citas del spa</p>
-
-    <!-- Filtro por fecha -->
-    <div class="bg-white rounded-2xl shadow-md p-6 mb-8 flex items-center gap-6">
-      <label class="text-stone-600 text-sm font-medium">Filtrar por fecha:</label>
-      <input type="date" [(ngModel)]="fechaSeleccionada"
-        class="border border-stone-300 rounded-full px-4 py-2 focus:outline-none focus:border-teal-500"/>
-      @if (fechaSeleccionada) {
-        <button (click)="fechaSeleccionada = ''"
-          class="text-stone-400 hover:text-stone-600 text-sm">
-          Limpiar filtro ✕
-        </button>
-      }
+    <!-- Tabs de navegación -->
+    <div class="admin-tabs">
+      <div class="admin-tabs__inner">
+        <a routerLink="/admin/calendario" class="admin-tab admin-tab--active">Citas</a>
+        <a routerLink="/admin/bloqueos"   class="admin-tab">Bloqueos</a>
+      </div>
     </div>
 
-    <!-- Tabla de citas -->
-    @if (citasFiltradas.length === 0) {
-      <div class="bg-white rounded-2xl shadow-md p-12 text-center">
-        <div class="text-6xl mb-4">📅</div>
-        <p class="text-stone-400">No hay citas para mostrar</p>
+    <!-- Encabezado -->
+    <p class="admin-page-title">Panel Admin</p>
+    <p class="admin-page-sub">Gestión de citas del spa</p>
+
+    <!-- Filtro -->
+    <div class="admin-card admin-toolbar">
+      <span class="admin-toolbar__label">Filtrar por fecha</span>
+
+      <!-- Date pill igual que en la página de agendar -->
+      <div class="date-pill">
+        <span class="date-pill__icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+        </span>
+        <input type="date"
+          class="date-pill__input"
+          [value]="fechaSeleccionada()"
+          (change)="setFecha($any($event.target).value)"/>
       </div>
+
+      @if (fechaSeleccionada()) {
+        <button class="admin-clear-btn" (click)="limpiarFecha()">Limpiar ✕</button>
+      }
+      <button class="admin-btn-link" (click)="cargarCitas()">↺ Actualizar</button>
+    </div>
+
+
+    <!-- Estado: cargando -->
+    @if (cargando()) {
+      <div class="admin-card admin-state">
+        <p class="admin-state__text">Cargando citas...</p>
+      </div>
+
+    <!-- Estado: error -->
+    } @else if (error()) {
+      <div class="admin-card admin-state">
+        <div class="admin-state__icon">⚠️</div>
+        <p class="admin-state__text">
+          No se pudieron cargar las citas.<br>
+          Verifica que el servidor esté corriendo.
+        </p>
+        <button class="btn-primary" style="max-width: 12rem; margin: 0 auto;" (click)="cargarCitas()">
+          Reintentar
+        </button>
+      </div>
+
+    <!-- Estado: sin citas -->
+    } @else if (citasFiltradas().length === 0) {
+      <div class="admin-card admin-state">
+        <p class="admin-state__text">No hay citas para mostrar</p>
+      </div>
+
+    <!-- Tabla de citas -->
     } @else {
-      <div class="bg-white rounded-2xl shadow-md overflow-hidden">
-        <table class="w-full">
-          <thead class="bg-teal-600 text-white">
-            <tr>
-              <th class="px-6 py-4 text-left text-sm font-medium">Cliente</th>
-              <th class="px-6 py-4 text-left text-sm font-medium">Servicio</th>
-              <th class="px-6 py-4 text-left text-sm font-medium">Fecha</th>
-              <th class="px-6 py-4 text-left text-sm font-medium">Hora</th>
-              <th class="px-6 py-4 text-left text-sm font-medium">Teléfono</th>
-              <th class="px-6 py-4 text-left text-sm font-medium">Email</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (cita of citasFiltradas; track cita.id) {
-              <tr class="border-b border-stone-100 hover:bg-stone-50 transition-colors">
-                <td class="px-6 py-4 text-stone-700">{{ cita.nombre_cliente }}</td>
-                <td class="px-6 py-4 text-stone-600">{{ cita.nombre_servicio }}</td>
-                <td class="px-6 py-4 text-stone-600">{{ cita.fecha }}</td>
-                <td class="px-6 py-4 text-stone-600">{{ cita.hora }}</td>
-                <td class="px-6 py-4 text-stone-600">{{ cita.telefono }}</td>
-                <td class="px-6 py-4 text-stone-600">{{ cita.email }}</td>
+      <div class="admin-table-wrap">
+        <div class="admin-count">{{ citasFiltradas().length }} cita(s) encontrada(s)</div>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Servicio</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Teléfono</th>
+                <th>Estado</th>
+                <th>Acción</th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              @for (cita of citasFiltradas(); track cita.id) {
+                <tr>
+                  <td>
+                    <p class="admin-td-name">{{ cita.nombre_cliente }}</p>
+                    <p class="admin-td-sub">{{ cita.email }}</p>
+                  </td>
+                  <td>{{ cita.nombre_servicio }}</td>
+                  <td>{{ formatoFecha(cita.fecha) }}</td>
+                  <td>{{ formatoHora(cita.hora) }}</td>
+                  <td>{{ cita.telefono || '—' }}</td>
+                  <td>
+                    <span class="badge badge--{{ cita.estado || 'pendiente' }}">
+                      {{ estadoLabel(cita.estado) }}
+                    </span>
+                  </td>
+                  <td>
+                    @if (cita.estado !== 'cancelada' && cita.estado !== 'completada') {
+                      <button class="btn-cancel-inline" (click)="cancelarCita(cita.id)">
+                        Cancelar
+                      </button>
+                    } @else {
+                      <span style="color: #D1D5DB; font-size: 0.8rem;">—</span>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
     }
 
