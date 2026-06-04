@@ -36,6 +36,28 @@ export class Auth {
     );
   }
 
+  // RECUPERAR CONTRASEÑA------------------------------
+  forgotPassword(email: string) {
+    return this.http.post(
+      `${this.apiUrl}/auth/forgot-password`,
+      { email }
+    );
+  }
+
+  verifyResetToken(token: string) {
+    return this.http.get(
+      `${this.apiUrl}/auth/verify-reset-token/${token}`
+    );
+  }
+
+  resetPassword(token: string, password: string) {
+    return this.http.post(
+      `${this.apiUrl}/auth/reset-password/${token}`,
+      { password }
+    );
+  }
+  // --------------------------------------------------
+
   actualizarPerfil(datos: { nombre: string; email: string; telefono: string }): Observable<Usuario> {
     return this.http.put<unknown>(`${this.apiUrl}/auth/perfil`, datos).pipe(
       map(response => this.normalizarUsuario(response, this.usuarioActual())),

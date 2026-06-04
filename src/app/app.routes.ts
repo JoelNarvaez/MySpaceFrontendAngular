@@ -11,6 +11,13 @@ export const routes: Routes = [
     { path: 'nosotros', loadComponent: () => import('./pages/nosotros/nosotros').then(m => m.Nosotros) },
     { path: 'contacto', loadComponent: () => import('./pages/contacto/contacto').then(m => m.Contacto) },
     { path: 'login', loadComponent: () => import('./pages/login/login').then(m => m.Login) },
+
+    // RECUPERAR CONTRASEÑA --------------------------------------------------------
+    {path: 'forgot-password', loadComponent: () => import('./pages/forgot-password/forgot-password').then(m => m.ForgotPassword) },
+
+    {path: 'reset-password/:token', loadComponent: () => import('./pages/reset-password/reset-password').then(m => m.ResetPassword) },
+    // --------------------------------------------------------------------------------------
+
     { path: 'registro', loadComponent: () => import('./pages/registro/registro').then(m => m.Registro) },
     
     // Rutas protegidas - usuario
