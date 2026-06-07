@@ -104,8 +104,8 @@ export class AdminBloqueos implements OnInit {
   // ── Bloqueo rápido por día de semana ───────────────────────────────────────
   bloqueoRapidoDia(diaSemana: number, nombre: string) {
     Swal.fire({
-      title: `¿Bloquear todos los ${nombre}s?`,
-      text: `Nadie podrá agendar citas los ${nombre}s.`,
+      title: `¿Bloquear todos los ${nombre}?`,
+      text: `Nadie podrá agendar citas los ${nombre}.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, bloquear',
@@ -117,10 +117,10 @@ export class AdminBloqueos implements OnInit {
       this.bloqueosService.crearBloqueo({
         tipo: 'dia',
         dia_semana: diaSemana,
-        motivo: `${nombre}s — día de descanso`,
+        motivo: `${nombre} — día de descanso`,
       }).subscribe({
         next: () => {
-          Swal.fire({ icon: 'success', title: `¡${nombre}s bloqueados!`, showConfirmButton: false, timer: 1500 });
+          Swal.fire({ icon: 'success', title: `¡${nombre} bloqueados!`, showConfirmButton: false, timer: 1500 });
           this.cargarBloqueos();
         },
         error: () => Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo crear el bloqueo', confirmButtonColor: '#0d9488' })

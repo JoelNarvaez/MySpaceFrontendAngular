@@ -139,7 +139,7 @@
                     @if (bloqueo.tipo === 'dia') {
                       @if (bloqueo.fecha) { {{ formatoFecha(bloqueo.fecha) }} }
                       @if (bloqueo.dia_semana !== null && bloqueo.dia_semana !== undefined) {
-                        Todos los {{ nombreDia(bloqueo.dia_semana) }}
+                        {{ nombreDia(bloqueo.dia_semana) }}
                       }
                     } @else {
                       {{ bloqueo.hora_inicio }} – {{ bloqueo.hora_fin }}
